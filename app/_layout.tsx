@@ -50,6 +50,7 @@ export default function RootLayout() {
         <Stack.Screen name="(modals)/volunteerHelpModal" options={{ presentation: 'modal' }} />
         <Stack.Screen name="(modals)/campusEventModal" options={{ presentation: 'modal' }} />
         <Stack.Screen name="post-detail" />
+        <Stack.Screen name="MessagingScreen"/>
       </Stack>
     </AuthProvider>
   );

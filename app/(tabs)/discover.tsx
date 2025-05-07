@@ -7,9 +7,14 @@ import provinceUniversities from '@/json/province-universities.json';
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import {  query, where, doc, setDoc } from 'firebase/firestore';
+import { useAuth } from '@/contexts/authContext'; // Auth sisteminden kullanıcı bilgilerini almak için
+import { startChat } from '@/services/chatService';
+
 
 interface Post {
   id: string;
+  ownerId: string; 
   ownerName: string;
   ownerUniversity: string;
   ownerImage: string;
@@ -34,6 +39,8 @@ const Discover = () => {
   const [allUniversities, setAllUniversities] = useState<string[]>([]);
   const [universitySearchText, setUniversitySearchText] = useState('');
   const [posts, setPosts] = useState<Post[]>([]);
+  const { user } = useAuth();
+
 
   useEffect(() => {
     const formatUniversityName = (name: string): string => {
@@ -59,6 +66,7 @@ const Discover = () => {
           const d = doc.data();
           allData.push({
             id: doc.id,
+            ownerId: d.ownerUid,
             ownerName: d.ownerName,
             ownerUniversity: d.ownerUniversity,
             ownerImage: d.ownerImage || '',
@@ -92,6 +100,25 @@ const Discover = () => {
      }
    });
   };
+  const handleStartChat = async (post: Post) => {
+    if (!user?.uid || !user?.name) return;
+    const chatId = await startChat({
+      currentUserId: user?.uid,
+      currentUserName: user?.name,
+      receiverId: post.ownerId,
+      receiverName: post.ownerName,
+    });
+  
+    router.push({
+      pathname: '/MessagingScreen',
+      params: {
+        chatId,
+        receiverName: post.ownerName,
+        currentUserId: user?.uid,
+        username: user?.name,
+      },
+    });
+  };
 
   const renderPostItem = ({ item }: { item: Post }) => (
     <View style={styles.postCard}>
@@ -118,7 +145,7 @@ const Discover = () => {
         <TouchableOpacity onPress={() => handlePostPress(item)}>
           <Text style={styles.detailsText}>Detayları görüntüle</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.contactButton}>
+        <TouchableOpacity style={styles.contactButton} onPress={()=>handleStartChat(item)}>
           <Text style={styles.contactButtonText}>İlgileniyorum</Text>
         </TouchableOpacity>
       </View>
