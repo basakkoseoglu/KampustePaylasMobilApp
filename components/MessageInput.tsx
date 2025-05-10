@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import * as Icons from 'phosphor-react-native';
+import React from "react";
+import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import * as Icons from "phosphor-react-native";
 
 interface MessageInputProps {
   newMessage: string;
@@ -21,9 +21,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
     <View style={styles.container}>
       <TextInput
         value={newMessage}
-        onChangeText={text => {
+        onChangeText={(text) => {
           setNewMessage(text);
-          if (text.trim()) {
+          if (text.trim().length > 0) {
             handleTyping();
           } else {
             stopTyping();
@@ -44,29 +44,41 @@ export default MessageInput;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: '#fff',
+    paddingVertical: 10,
+    backgroundColor: "white",
     borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    borderTopColor: "#eee",
   },
+
+  // input: {
+  //   flex: 1,
+  //   borderRadius: 999,
+  //   borderWidth: 1,
+  //   borderColor: '#ccc',
+  //   paddingHorizontal: 12,
+  //   paddingVertical: 8,
+  //   fontSize: 16,
+  //   backgroundColor: '#f9f9f9',
+  // },
   input: {
     flex: 1,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderRadius: 999, // daireye yakın görünüm
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     fontSize: 16,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f2f2f2",
+    color: "#000",
+    marginRight: 8,
   },
+
   sendButton: {
-    marginLeft: 8,
-    backgroundColor: '#007AFF',
-    borderRadius: 20,
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#007AFF",
+    padding: 12,
+    borderRadius: 999,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

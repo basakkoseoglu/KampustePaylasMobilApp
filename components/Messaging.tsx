@@ -31,6 +31,28 @@ const Messaging: React.FC<MessagingProps> = ({
   const [isTypingText, setIsTypingText] = useState('');
   const flatListRef = useRef<FlatList>(null);
 
+  const formatDateLabel = (timestamp: number) => {
+    const now = new Date();
+    const date = new Date(timestamp);
+
+    const today = new Date();
+    const msgDate = new Date(date);
+
+    const todayStart = new Date(today.setHours(0, 0, 0, 0));
+    const msgStart = new Date(msgDate.setHours(0, 0, 0, 0));
+
+    const diffDays = Math.floor(
+      (todayStart.getTime() - msgStart.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffDays === 0) return 'Bugün';
+    if (diffDays === 1) return 'Dün';
+    if (diffDays < 7) {
+      return msgStart.toLocaleDateString('tr-TR', { weekday: 'long' });
+    }
+    return msgStart.toLocaleDateString('tr-TR');
+  };
+
   useEffect(() => {
     if (!chatId) return;
 
@@ -120,15 +142,32 @@ const Messaging: React.FC<MessagingProps> = ({
     setIsTypingText('');
   };
 
+  const renderMessagesWithDate = () => {
+    const grouped: { [key: string]: any[] } = {};
+
+    messages.forEach((msg) => {
+      const label = formatDateLabel(msg.timestamp);
+      if (!grouped[label]) grouped[label] = [];
+      grouped[label].push(msg);
+    });
+
+    return Object.entries(grouped).map(([label, group]) => (
+      <View key={label}>
+        <Text style={styles.dateLabel}>{label}</Text>
+        {group.map((msg) => (
+          <MessageItem key={msg.id} item={msg} currentUserId={currentUserId} />
+        ))}
+      </View>
+    ));
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         ref={flatListRef}
-        data={messages}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <MessageItem item={item} currentUserId={currentUserId} />
-        )}
+        data={[]}
+        ListHeaderComponent={<>{renderMessagesWithDate()}</>}
+        renderItem={null}
         contentContainerStyle={styles.messagesList}
         keyboardShouldPersistTaps="handled"
       />
@@ -171,5 +210,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'italic',
     color: 'black',
+  },
+  dateLabel: {
+    textAlign: 'center',
+    color: '#888',
+    marginVertical: 10,
+    fontSize: 12,
   },
 });
