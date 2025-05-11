@@ -14,9 +14,12 @@ import provinceUniversities from "@/json/province-universities.json";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { query, where, doc, setDoc } from "firebase/firestore";
-import { useAuth } from "@/contexts/authContext"; // Auth sisteminden kullanıcı bilgilerini almak için
+import { query, where, setDoc } from "firebase/firestore";
+import { useAuth } from "@/contexts/authContext";
 import { startChat } from "@/services/chatService";
+import { Alert } from "react-native";
+import { Trash } from "phosphor-react-native";
+import { deleteDoc, doc } from "firebase/firestore";
 
 interface Post {
   id: string;
@@ -25,7 +28,8 @@ interface Post {
   ownerUniversity: string;
   ownerImage: string;
   title: string;
-  type: string; // Firestore collection name (e.g., 'notesAds')
+  type: string;
+  createdAt: number;
 }
 
 const POST_TYPES = [
@@ -34,6 +38,12 @@ const POST_TYPES = [
   { label: "Yardımlaşma", value: "volunteerAds" },
   { label: "Etkinlik", value: "eventAds" },
 ];
+const formatDate = (timestamp: number) => {
+  const date = new Date(timestamp);
+  return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}.${date.getFullYear()}`;
+};
 
 const Discover = () => {
   const router = useRouter();
@@ -90,7 +100,13 @@ const Discover = () => {
               d.adTitle ||
               d.ilanBasligi ||
               "İlan",
-            type: name, 
+            type: name,
+            createdAt:
+              typeof d.createdAt === "number"
+                ? d.createdAt
+                : typeof d.createdAt?.toDate === "function"
+                ? d.createdAt.toDate().getTime()
+                : Date.now(),
           });
         });
       }
@@ -124,15 +140,33 @@ const Discover = () => {
       },
     });
   };
+  const handleDeletePost = async (postId: string, type: string) => {
+    Alert.alert("İlanı Sil", "Bu ilanı silmek istediğinize emin misiniz?", [
+      { text: "İptal", style: "cancel" },
+      {
+        text: "Sil",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteDoc(doc(getFirestore(), type, postId));
+            setPosts((prev) => prev.filter((p) => p.id !== postId));
+          } catch (error) {
+            console.error("İlan silme hatası:", error);
+          }
+        },
+      },
+    ]);
+  };
+
   const handleStartChat = async (post: Post) => {
     if (!user?.uid || !user?.name) return;
     const chatId = await startChat({
       currentUserId: user?.uid,
       currentUserName: user?.name,
-      currentUserImage:user?.image,
+      currentUserImage: user?.image,
       receiverId: post.ownerId,
       receiverName: post.ownerName,
-      receiverImage:post?.ownerImage,
+      receiverImage: post?.ownerImage,
     });
 
     router.push({
@@ -162,20 +196,41 @@ const Discover = () => {
               </Text>
             )}
           </View>
-          <View>
-            <Text style={styles.userName}>{item.ownerName}</Text>
-            <View style={styles.universityRow}>
-              <Icons.MapPin
-                size={14}
-                color={colors.neutral400}
-                style={{ marginRight: 4 }}
-              />
-              <Text style={styles.universityText}>{item.ownerUniversity}</Text>
+          <View style={styles.userInfoContainer}>
+            <View style={styles.userRow}>
+              <View style={styles.userDetails}>
+                <Text style={styles.userName}>{item.ownerName}</Text>
+                <View style={styles.universityRow}>
+                  <Icons.MapPin
+                    size={14}
+                    color={colors.neutral400}
+                    style={{ marginRight: 4 }}
+                  />
+                  <Text style={styles.universityText}>
+                    {item.ownerUniversity}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.dateContainer}>
+                <Text style={styles.dateLabel}>Yayınlanma Tarihi</Text>
+                <Text style={styles.dateText}>
+                  {formatDate(item.createdAt)}
+                </Text>
+              </View>
             </View>
           </View>
         </View>
       </View>
       <Text style={styles.postTitle}>{item.title}</Text>
+      {user?.uid === item.ownerId && (
+        <TouchableOpacity
+          onPress={() => handleDeletePost(item.id, item.type)}
+          style={{ alignSelf: "flex-end", marginBottom: 8 }}
+        >
+          <Trash size={20} color="#D32F2F" />
+        </TouchableOpacity>
+      )}
+
       <View style={styles.cardFooter}>
         <TouchableOpacity onPress={() => handlePostPress(item)}>
           <Text style={styles.detailsText}>Detayları görüntüle</Text>
@@ -416,8 +471,12 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 8,
+    width: "100%",
+  },
+  userInfoContainer: {
+    flex: 1,
   },
   avatar: {
     width: 36,
@@ -437,13 +496,40 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 18,
   },
+  userRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  userDetails: {
+    flex: 1,
+  },
   userName: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
   },
+  universityRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   universityText: {
-    fontSize: 12,
+    fontSize: 11,
     color: colors.neutral400,
+  },
+  dateContainer: {
+    alignItems: "flex-end",
+    minWidth: 100,
+  },
+  dateLabel: {
+    fontSize: 11,
+    color: "#888",
+    textAlign: "right",
+  },
+  dateText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#333",
+    textAlign: "right",
   },
   postTitle: {
     fontSize: 16,
@@ -468,9 +554,5 @@ const styles = StyleSheet.create({
   contactButtonText: {
     color: "white",
     fontWeight: "600",
-  },
-  universityRow: {
-    flexDirection: "row",
-    alignItems: "center",
   },
 });
