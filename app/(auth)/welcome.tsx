@@ -63,13 +63,13 @@ export default Welcome;
 
 const styles = StyleSheet.create({
   backgroundImage: {
-    flex: 1,             // Tüm alanı kaplasın
+    flex: 1,             // tüm alanı kaplasın
     width: "100%",
     height: "100%",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.3)", // Karartma; istersen kaldır veya azalt
+    backgroundColor: "rgba(0, 0, 0, 0.3)", // karartma; istersen kaldır veya azalt
   },
   container: {
     flex: 1,

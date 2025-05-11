@@ -52,20 +52,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#eee",
   },
-
-  // input: {
-  //   flex: 1,
-  //   borderRadius: 999,
-  //   borderWidth: 1,
-  //   borderColor: '#ccc',
-  //   paddingHorizontal: 12,
-  //   paddingVertical: 8,
-  //   fontSize: 16,
-  //   backgroundColor: '#f9f9f9',
-  // },
   input: {
     flex: 1,
-    borderRadius: 999, // daireye yakın görünüm
+    borderRadius: 999, 
     paddingHorizontal: 16,
     paddingVertical: 10,
     fontSize: 16,
@@ -74,11 +63,13 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
 
-  sendButton: {
-    backgroundColor: "#007AFF",
-    padding: 12,
-    borderRadius: 999,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+ sendButton: {
+  marginLeft: 8,
+  backgroundColor: '#84A06E',
+  borderRadius: 20,
+  padding: 10,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
 });

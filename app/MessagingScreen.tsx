@@ -9,9 +9,10 @@ import { ArrowLeft } from 'phosphor-react-native';
 
 
 const MessagingScreen = () => {
-  const { chatId, receiverName } = useLocalSearchParams<{
+  const { chatId, receiverName ,receiverImage} = useLocalSearchParams<{
     chatId: string;
     receiverName: string;
+    receiverImage?:string;
   }>();
 
   const { user } = useAuth();
@@ -36,6 +37,7 @@ const MessagingScreen = () => {
       currentUserId={user.uid}
       username={user.name}
       receiverName={receiverName}
+      receiverImage={receiverImage}
     />
   </View>
 );

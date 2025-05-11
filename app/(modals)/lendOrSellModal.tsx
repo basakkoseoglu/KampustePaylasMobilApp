@@ -19,6 +19,7 @@ import { colors } from "@/constants/theme";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { firestore } from "@/config/firebase";
 import BackButton from "@/components/BackButton";
+import { doc, getDoc } from "firebase/firestore";
 
 const LendOrSellModal = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const LendOrSellModal = () => {
   // Kişi Bilgileri
   const [ownerName, setOwnerName] = useState("");
   const [schoolInfo, setSchoolInfo] = useState("");
+  const [userImage, setUserImage] = useState<string | null>(null);
 
   // İlan Bilgileri
   const [itemTitle, setItemTitle] = useState("");
@@ -63,6 +65,23 @@ const LendOrSellModal = () => {
   useEffect(() => {
     if (user?.name) setOwnerName(user.name);
     if (user?.university) setSchoolInfo(user.university);
+  }, [user]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.uid) {
+        const ref = doc(firestore, "users", user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const data = snap.data();
+          setOwnerName(data.name || "");
+          setSchoolInfo(data.university || "");
+          setUserImage(data.image || null);
+        }
+      }
+    };
+
+    fetchUserData();
   }, [user]);
 
   // Dropdown seçimleri
@@ -103,7 +122,7 @@ const LendOrSellModal = () => {
         ownerUid: user?.uid,
         ownerName: user?.name,
         ownerUniversity: user?.university,
-        ownerImage: user?.image,
+        ownerImage: userImage,
 
         itemTitle,
         description,
