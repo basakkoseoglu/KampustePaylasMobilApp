@@ -6,7 +6,8 @@ import {
   getDocs,
   query,
   where,
-  deleteDoc
+  deleteDoc,
+  getDoc
 } from 'firebase/firestore';
 
 interface StartChatOptions {
@@ -30,27 +31,39 @@ export const startChat = async ({
   const chatId = chatParticipants.join('_');
 
   const chatRef = doc(firestore, 'chats', chatId);
-  const chatSnap = await getDocs(
-    query(collection(firestore, 'chats'), where('chatId', '==', chatId))
-  );
+  
+  const chatDocSnap = await getDoc(chatRef);
 
-  if (chatSnap.empty) {
+  if (!chatDocSnap.exists()) {
     await setDoc(chatRef, {
-      chatId,
-      participants: [currentUserId, receiverId],
+      participants: chatParticipants,
       participantsInfo: [
-        { id: currentUserId, name: currentUserName, image: currentUserImage || null },
-        { id: receiverId, name: receiverName, image: receiverImage || null },
+        {
+          id: currentUserId,
+          name: currentUserName,
+          image: currentUserImage && currentUserImage.trim() !== ""
+        ? currentUserImage
+        : null,
+        },
+        {
+          id: receiverId,
+          name: receiverName,
+          image: receiverImage && receiverImage.trim() !== ""
+        ? receiverImage
+        : null,
+        },
       ],
       createdAt: Date.now(),
       lastMessage: '',
       updatedAt: Date.now(),
     });
+    console.log('New chat created with ID:', chatId);
+  } else {
+    console.log('Chat already exists with ID:', chatId);
   }
 
   return chatId;
 };
-
 
 export const deleteChatWithMessages = async (chatId: string) => {
   try {
@@ -58,10 +71,12 @@ export const deleteChatWithMessages = async (chatId: string) => {
     const messagesSnap = await getDocs(messagesRef);
     const deletePromises = messagesSnap.docs.map((doc) => deleteDoc(doc.ref));
     await Promise.all(deletePromises);
-
+    
     await deleteDoc(doc(firestore, 'chats', chatId));
-    console.log('Sohbet ve mesajlar silindi:', chatId);
+    console.log('Chat and messages deleted:', chatId);
+    return true;
   } catch (error) {
-    console.error('Sohbet silme hatası:', error);
+    console.error('Error deleting chat:', error);
+    throw error;
   }
 };

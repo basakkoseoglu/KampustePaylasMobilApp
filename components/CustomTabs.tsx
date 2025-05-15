@@ -14,29 +14,29 @@ export default function CustomTabs({
 
     const tabbarIcons:any={
         index:(isFocused:boolean)=>(
-            <Icons.PushPin
-            size={verticalScale(30)}
+            <Icons.CalendarBlank
+            size={verticalScale(28)}
             weight={isFocused ? "fill" :"regular"}
             color={isFocused ? colors.primary: colors.primaryLight}
          />
         ),
         discover:(isFocused:boolean)=>(
-            <Icons.CardsThree
-            size={verticalScale(30)}
+            <Icons.Megaphone
+            size={verticalScale(28)}
             weight={isFocused ? "fill" :"regular"}
             color={isFocused ? colors.primary: colors.primaryLight}
          />
         ),
         chat:(isFocused:boolean)=>(
-            <Icons.ChatText
+            <Icons.ChatCircleDots
             size={verticalScale(30)}
             weight={isFocused ? "fill" :"regular"}
             color={isFocused ? colors.primary : colors.primaryLight}
          />
         ),
         profile:(isFocused:boolean)=>(
-            <Icons.User
-            size={verticalScale(30)}
+            <Icons.UserCircle
+            size={verticalScale(32)}
             weight={isFocused ? "fill" :"regular"}
             color={isFocused ? colors.primary : colors.primaryLight}
          />
@@ -105,7 +105,7 @@ export default function CustomTabs({
         backgroundColor:colors.neutral100,
         justifyContent:"space-around",
         alignItems:"center",
-        borderTopColor:colors.primaryLight,
+        borderTopColor:colors.white,
         borderTopWidth:1,
     },
     tabbarItem:{

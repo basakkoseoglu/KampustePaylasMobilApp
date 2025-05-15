@@ -1,7 +1,7 @@
 import { scale, verticalScale } from "@/utils/styling";
 
 export const colors = {
-  primary: "#a3e635",
+  primary: "#268504EE",
   primaryLight: "#4CAF50", //buton rengim
   text: "#fffff", 
   textLight: "#e5e5e5",
