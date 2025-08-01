@@ -41,8 +41,27 @@ Kısacası <b>Kampüste Yaşam</b>, kampüs hayatını dijital bir topluluk orta
 
 <h2>📸 Ekran Görüntüleri</h2>
 
+## 📸 Ekran Görüntüleri
+
 <p align="center">
-  <img src="./screenshots/login.png" alt="Login Screen" width="250"/>
-  <img src="./screenshots/home.png" alt="Home Screen" width="250"/>
-  <img src="./screenshots/chat.png" alt="Chat Screen" width="250"/>
+  <img src="./screenshots/acilisekrani.png" alt="Açılış Ekranı" width="220"/>
+  <img src="./screenshots/girisyap.png" alt="Giriş Yap" width="220"/>
+  <img src="./screenshots/kayitol.png" alt="Kayıt Ol" width="220"/>
 </p>
+
+<p align="center">
+  <img src="./screenshots/anaekran.png" alt="Ana Ekran" width="220"/>
+  <img src="./screenshots/ilanpaylas.png" alt="İlan Paylaş" width="220"/>
+  <img src="./screenshots/ilanlisteleme (1).png" alt="İlan Listeleme" width="220"/>
+</p>
+
+<p align="center">
+  <img src="./screenshots/detaygörüntüleme.png" alt="İlan Detayı" width="220"/>
+  <img src="./screenshots/chat.png" alt="Chat Ekranı" width="220"/>
+  <img src="./screenshots/chat2.png" alt="Chat Ekranı 2" width="220"/>
+</p>
+
+<p align="center">
+  <img src="./screenshots/profilekrani.png" alt="Profil Ekranı" width="220"/>
+</p>
+
