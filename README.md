@@ -41,8 +41,6 @@ Kısacası <b>Kampüste Yaşam</b>, kampüs hayatını dijital bir topluluk orta
 
 <h2>📸 Ekran Görüntüleri</h2>
 
-## 📸 Ekran Görüntüleri
-
 <p align="center">
   <img src="./screenshots/acilisekrani.png" alt="Açılış Ekranı" width="220"/>
   <img src="./screenshots/girisyap.png" alt="Giriş Yap" width="220"/>
