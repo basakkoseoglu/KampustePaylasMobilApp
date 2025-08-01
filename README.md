@@ -1,50 +1,48 @@
-# Welcome to your Expo app 👋
+<h1 align="center">📱 Kampüste Yaşam</h1>
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<p align="center">
+  <b>Kampüste Yaşam</b>, üniversite öğrencileri için özel olarak geliştirilmiş bir mobil uygulamadır.<br>
+  Amacı, öğrencilerin kampüs hayatını daha <b>sosyal</b>, <b>verimli</b> ve <b>keyifli</b> hale getirmektir.
+</p>
 
-## Get started
+<p>
+Bu uygulama sayesinde öğrenciler:
+</p>
 
-1. Install dependencies
+- 📢 <b>Duyuru ve İlanlar</b> paylaşabilir  
+- 📅 <b>Etkinliklere</b> katılabilir  
+- 📚 <b>Not ve kaynak alışverişi</b> yapabilir  
+- 🤝 <b>Gönüllülük fırsatları</b> bulabilir  
+- 💬 <b>Gerçek zamanlı mesajlaşma</b> ile iletişim kurabilir  
 
-   ```bash
-   npm install
-   ```
+<p>
+Kısacası <b>Kampüste Yaşam</b>, kampüs hayatını dijital bir topluluk ortamına taşıyan modern bir platformdur.
+</p>
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+<h2>🚀 Özellikler</h2>
 
-In the output, you'll find options to open the app in a
+- 👥 Öğrenciler arası <b>ilan ve paylaşım sistemi</b>  
+- 💬 <b>Gerçek zamanlı chat</b> (Firestore tabanlı)  
+- 📸 <b>Cloudinary API</b> ile medya yükleme  
+- 🔑 <b>Firebase Authentication</b> ile güvenli giriş  
+- 📱 <b>React Native + Expo</b> ile modern, hızlı ve şık arayüz  
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+<h2>🛠 Kullanılan Teknolojiler</h2>
 
-## Get a fresh project
+- React Native (Expo)  
+- Firebase Firestore  
+- Firebase Authentication  
+- Cloudinary API  
+---
 
-When you're ready, run:
+<h2>📸 Ekran Görüntüleri</h2>
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+<p align="center">
+  <img src="./screenshots/login.png" alt="Login Screen" width="250"/>
+  <img src="./screenshots/home.png" alt="Home Screen" width="250"/>
+  <img src="./screenshots/chat.png" alt="Chat Screen" width="250"/>
+</p>
