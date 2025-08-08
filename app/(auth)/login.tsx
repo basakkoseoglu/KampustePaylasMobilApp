@@ -54,7 +54,7 @@ const Login = () => {
             }
           />
           <TextInputField
-            placeholder="Şifreeee"
+            placeholder="Şifre"
             secureTextEntry
             onChangeText={(value) => (passwordRef.current = value)}
             icon={
