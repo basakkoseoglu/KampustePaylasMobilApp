@@ -123,14 +123,12 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   footer: {
-    position: "absolute",
-    bottom: 170,
-    left: 0,
-    right: 0,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 5,
+    marginTop: spacingY._40, // Footer'ı form'dan ayırmak için
+    paddingVertical: spacingY._20,
   },
   footerText: {
     textAlign: "center",
