@@ -80,40 +80,57 @@ const Discover = () => {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const db = getFirestore();
-      const allData: Post[] = [];
-      const collections = ["loanAds", "notesAds", "volunteerAds", "eventAds"];
-      for (const name of collections) {
-        const snap = await getDocs(collection(db, name));
-        snap.forEach((doc) => {
-          const d = doc.data();
-          allData.push({
-            id: doc.id,
-            ownerId: d.ownerUid,
-            ownerName: d.ownerName,
-            ownerUniversity: d.ownerUniversity,
-            ownerImage: d.ownerImage || "",
-            title:
-              d.itemTitle ||
-              d.courseTitle ||
-              d.adTitle ||
-              d.ilanBasligi ||
-              "İlan",
-            type: name,
-            createdAt:
-              typeof d.createdAt === "number"
-                ? d.createdAt
-                : typeof d.createdAt?.toDate === "function"
-                ? d.createdAt.toDate().getTime()
-                : Date.now(),
-          });
+  if (user?.university) {
+    const formatted = user.university
+      .split(" ")
+      .map(w => w.charAt(0).toLocaleUpperCase("tr-TR") + w.slice(1).toLocaleLowerCase("tr-TR"))
+      .join(" ");
+    setSelectedUniversity(formatted);
+  }
+}, [user?.university]);
+
+useEffect(() => {
+  const fetchData = async () => {
+    const db = getFirestore();
+    const allData: Post[] = [];
+    const collections = ["loanAds", "notesAds", "volunteerAds", "eventAds"];
+
+    for (const name of collections) {
+      const ref = collection(db, name);
+      const q =
+        selectedUniversity && selectedUniversity !== "Tümü"
+          ? query(ref, where("ownerUniversity", "==", selectedUniversity))
+          : ref;
+
+      const snap = await getDocs(q);
+      snap.forEach((doc) => {
+        const d = doc.data() as any;
+        allData.push({
+          id: doc.id,
+          ownerId: d.ownerUid,
+          ownerName: d.ownerName,
+          ownerUniversity: d.ownerUniversity,
+          ownerImage: d.ownerImage || "",
+          title:
+            d.itemTitle || d.courseTitle || d.adTitle || d.ilanBasligi || "İlan",
+          type: name,
+          createdAt:
+            typeof d.createdAt === "number"
+              ? d.createdAt
+              : typeof d.createdAt?.toDate === "function"
+              ? d.createdAt.toDate().getTime()
+              : Date.now(),
         });
-      }
-      setPosts(allData);
-    };
-    fetchData();
-  }, []);
+      });
+    }
+
+    allData.sort((a, b) => b.createdAt - a.createdAt);
+    setPosts(allData);
+  };
+
+  fetchData();
+}, [selectedUniversity]); 
+
 
   const filteredPosts = posts.filter((post) => {
     const matchesType = selectedType === null || post.type === selectedType;

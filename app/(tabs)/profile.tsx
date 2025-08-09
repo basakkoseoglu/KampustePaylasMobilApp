@@ -69,16 +69,16 @@ const Profile = () => {
       routeName: '/(modals)/profileModal',
       bgColor: '#6366f1',
     },
+    // {
+    //   title: 'Ayarlar',
+    //   icon: <Icons.GearSix size={26} color={colors.white} weight="fill" />,
+    //   // routeName: '/(modals)/profileModal',
+    //   bgColor: '#059669',
+    // },
     {
-      title: 'Ayarlar',
-      icon: <Icons.GearSix size={26} color={colors.white} weight="fill" />,
-      // routeName: '/(modals)/profileModal',
-      bgColor: '#059669',
-    },
-    {
-      title: 'Gizlilik Politikası',
+      title: 'Hakkımızda',
       icon: <Icons.Lock size={26} color={colors.white} weight="fill" />,
-      // routeName: '/(modals)/profileModal',
+      routeName: '/(modals)/hakkimizdaModal',
       bgColor: colors.neutral400,
     },
     {
