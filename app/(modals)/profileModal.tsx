@@ -1,25 +1,31 @@
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { colors, spacingX, spacingY } from '@/constants/theme';
-import { scale, verticalScale } from '@/utils/styling';
-import ScreenWrapper from '@/components/ScreenWrapper';
-import ModalWrapper from '@/components/ModalWrapper';
-import Header from '@/components/Header';
-import BackButton from '@/components/BackButton';
-import { Image } from 'expo-image';
-import { getProfileImage } from '@/services/imageService';
-import * as Icons from 'phosphor-react-native';
-import { UserDataType } from '@/types';
-import Typo from '@/components/Typo';
-import TextInputField from '@/components/TextInputField';
-import Button from '@/components/Button';
-import { useAuth } from '@/contexts/authContext';
-import { updateUser } from '@/services/userService';
-import { useRouter } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
-import { useIsFocused } from '@react-navigation/native';
-import UniversityPicker from '@/components/universityPicker';
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { colors, spacingX, spacingY } from "@/constants/theme";
+import { scale, verticalScale } from "@/utils/styling";
+import ScreenWrapper from "@/components/ScreenWrapper";
+import ModalWrapper from "@/components/ModalWrapper";
+import Header from "@/components/Header";
+import BackButton from "@/components/BackButton";
+import { Image } from "expo-image";
+import { getProfileImage } from "@/services/imageService";
+import * as Icons from "phosphor-react-native";
+import { UserDataType } from "@/types";
+import Typo from "@/components/Typo";
+import TextInputField from "@/components/TextInputField";
+import Button from "@/components/Button";
+import { useAuth } from "@/contexts/authContext";
+import { updateUser } from "@/services/userService";
+import { useRouter } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
+import UniversityPicker from "@/components/universityPicker";
 
 const ProfileModal = () => {
   const { user, updateUserData } = useAuth();
@@ -66,12 +72,12 @@ const ProfileModal = () => {
       if (userSnap.exists()) {
         const fetchedData = userSnap.data();
         setUserData({
-          name:fetchedData.name || "",
-          image:fetchedData.image || null,
-          university:fetchedData.university || "",
-          department:fetchedData.department || "",
-          gender:fetchedData.gender || "",
-        })
+          name: fetchedData.name || "",
+          image: fetchedData.image || null,
+          university: fetchedData.university || "",
+          department: fetchedData.department || "",
+          gender: fetchedData.gender || "",
+        });
         setImageUrl(fetchedData.image);
       } else {
         console.log("Kullanıcı bulunamadı!");
@@ -100,7 +106,7 @@ const ProfileModal = () => {
 
   const onPickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.5,
@@ -113,7 +119,12 @@ const ProfileModal = () => {
 
   const onSubmit = async () => {
     let { name, image, university, department, gender } = userData;
-    if (!name.trim() || !university?.trim() || !department?.trim() || !gender?.trim()) {
+    if (
+      !name.trim() ||
+      !university?.trim() ||
+      !department?.trim() ||
+      !gender?.trim()
+    ) {
       Alert.alert("Kullanıcı", "Lütfen tüm alanları doldurun.");
       return;
     }
@@ -132,22 +143,22 @@ const ProfileModal = () => {
     <>
       <ModalWrapper>
         <View style={styles.container}>
-          <Header 
-            title='Profili Güncelle' 
-            leftIcon={<BackButton />} 
-            style={{ marginBottom: spacingY._10 }} 
+          <Header
+            title="Profili Güncelle"
+            leftIcon={<BackButton />}
+            style={{ marginBottom: spacingY._10 }}
           />
           <ScrollView contentContainerStyle={styles.form}>
             <View style={styles.avatarContainer}>
-              <Image 
+              <Image
                 style={styles.avatar}
                 source={
                   imageUrl
                     ? { uri: imageUrl }
-                    : require('../../assets/images/defaultAvatar.png')
-                } 
-                contentFit='cover'
-                transition={100} 
+                    : require("../../assets/images/defaultAvatar.png")
+                }
+                contentFit="cover"
+                transition={100}
               />
               <TouchableOpacity onPress={onPickImage} style={styles.editIcon}>
                 <Icons.Pencil size={verticalScale(20)} color={colors.black} />
@@ -158,65 +169,81 @@ const ProfileModal = () => {
               <TextInputField
                 placeholder="İsim"
                 value={userData.name}
-                onChangeText={(value) => setUserData({ ...userData, name: value })} 
+                onChangeText={(value) =>
+                  setUserData({ ...userData, name: value })
+                }
               />
             </View>
             <View style={styles.inputContainer}>
               <Typo color={colors.black}>Üniversite </Typo>
-              <UniversityPicker 
-              value={userData.university || ""} 
-              onChange={(university)=> setUserData({...userData,university})} />
+              <UniversityPicker
+                value={userData.university || ""}
+                onChange={(university) =>
+                  setUserData({ ...userData, university })
+                }
+              />
             </View>
             <View style={styles.inputContainer}>
               <Typo color={colors.black}>Bölüm </Typo>
               <TextInputField
-                placeholder='Bölüm'
+                placeholder="Bölüm"
                 value={userData.department}
-                onChangeText={(value)=>setUserData({...userData, department: value})} 
+                onChangeText={(value) =>
+                  setUserData({ ...userData, department: value })
+                }
               />
             </View>
             <View style={styles.inputContainer}>
               <Typo color={colors.black}>Cinsiyet</Typo>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => setShowGenderModal(true)}
                 style={styles.selectContainer}
               >
                 <Typo color={colors.black} fontWeight={"300"}>
                   {userData.gender ? userData.gender : "Seçiniz"}
                 </Typo>
-                <Icons.CaretDown size={16} color={colors.black} style={styles.dropdownIcon}/>
+                <Icons.CaretDown
+                  size={16}
+                  color={colors.black}
+                  style={styles.dropdownIcon}
+                />
               </TouchableOpacity>
             </View>
           </ScrollView>
-        </View>{
-          !showGenderModal &&(
-        
-        <View style={styles.footer}>
-          <Button onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
-            <Typo color={colors.white} fontWeight={"700"}>Güncelle</Typo>
-          </Button>
         </View>
-          )}
-          
+        {!showGenderModal && (
+          <View style={styles.footer}>
+            <Button onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
+              <Typo color={colors.white} fontWeight={"700"}>
+                Güncelle
+              </Typo>
+            </Button>
+          </View>
+        )}
       </ModalWrapper>
 
       {showGenderModal && (
-        <ModalWrapper style={{ backgroundColor: 'transparent' }}>
+        <ModalWrapper style={{ backgroundColor: "transparent" }}>
           <View style={styles.modalContainer}>
-            {genderOptions.map(option => (
-              <TouchableOpacity 
-                key={option.value} 
+            {genderOptions.map((option) => (
+              <TouchableOpacity
+                key={option.value}
                 onPress={() => {
                   setUserData({ ...userData, gender: option.value });
                   setShowGenderModal(false);
                 }}
                 style={styles.modalOption}
               >
-                <Typo color={colors.black} fontWeight={'300'}>{option.label}</Typo>
+                <Typo color={colors.black} fontWeight={"300"}>
+                  {option.label}
+                </Typo>
               </TouchableOpacity>
             ))}
             {/* İsteğe bağlı: Modalı kapatmak için iptal butonu */}
-            <Button onPress={() => setShowGenderModal(false)} style={styles.cancelButton}>
+            <Button
+              onPress={() => setShowGenderModal(false)}
+              style={styles.cancelButton}
+            >
               <Typo color={colors.white}>Vazgeç</Typo>
             </Button>
           </View>
@@ -246,7 +273,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   form: {
-    gap: spacingY._20,
+    gap: spacingY._25,
     marginTop: spacingY._10,
   },
   avatarContainer: {
@@ -283,7 +310,7 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral300,
     borderRadius: 12,
     height: verticalScale(50),
-    flexDirection: 'row',
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingRight: spacingX._10,

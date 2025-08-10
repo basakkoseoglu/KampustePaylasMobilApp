@@ -2,18 +2,18 @@ import { scale, verticalScale } from "@/utils/styling";
 
 export const colors = {
   primary: "#268504EE",
-  primaryLight: "#4CAF50", //buton rengim
-  text: "#fffff", 
+  primaryLight: "#188040", //buton rengim
+  text: "#fffff",
   textLight: "#e5e5e5",
   white: "#fff",
   black: "#000",
   neutral100: "#f5f5f5",
-  neutral150:"#FF9800",
-  neutral200:"#FCFCFCFF",
+  neutral150: "#FF9800",
+  neutral200: "#FCFCFCFF",
   neutral300: "#d4d4d4",
   neutral400: "#a3a3a3",
   neutral800: "#4CAF50",
-  neutral900: "#F5F5F5",  //arka plan rengim
+  neutral900: "#F5F5F5", //arka plan rengim
 };
 
 export const spacingX = {

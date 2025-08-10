@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View, ScrollView } from 'react-native';
-import { colors, spacingX, spacingY } from '@/constants/theme';
-import { verticalScale } from '@/utils/styling';
-import Typo from '@/components/Typo';
-import ModalWrapper from '@/components/ModalWrapper';
-import provinceUniversities from '../json/province-universities.json';
-import * as Icons from 'phosphor-react-native';
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from "react-native";
+import { colors, spacingX, spacingY } from "@/constants/theme";
+import { verticalScale } from "@/utils/styling";
+import Typo from "@/components/Typo";
+import ModalWrapper from "@/components/ModalWrapper";
+import provinceUniversities from "../json/province-universities.json";
+import * as Icons from "phosphor-react-native";
 
 interface UniversityPickerProps {
   value: string;
@@ -16,12 +22,12 @@ interface UniversityPickerProps {
 const UniversityPicker: React.FC<UniversityPickerProps> = ({
   value,
   onChange,
-  placeholder = "Üniversite Seçiniz"
+  placeholder = "Üniversite Seçiniz",
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [universities, setUniversities] = useState<string[]>([]);
   const [allUniversities, setAllUniversities] = useState<string[]>([]);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
 
   // const formatUniversityName = (name: string): string => {
   //   return name
@@ -33,41 +39,45 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({
   // Türkçe karakter desteği için geliştirilmiş fonksiyon
   const formatUniversityName = (name: string): string => {
     // Türkçe karakterleri de doğru şekilde dönüştüren toLocaleLowerCase kullanılıyor
-    const turkishLowerCase = name.toLocaleLowerCase('tr-TR');
-    
+    const turkishLowerCase = name.toLocaleLowerCase("tr-TR");
+
     return turkishLowerCase
-      .split(' ')
-      .map(word => {
-        if (word.length === 0) return '';
+      .split(" ")
+      .map((word) => {
+        if (word.length === 0) return "";
         // İlk harfi Türkçe kurallarına göre büyük yap
-        return word.charAt(0).toLocaleUpperCase('tr-TR') + word.slice(1);
+        return word.charAt(0).toLocaleUpperCase("tr-TR") + word.slice(1);
       })
-      .join(' ');
+      .join(" ");
   };
 
   useEffect(() => {
-    const allUniversityNames = provinceUniversities.flatMap(province =>
-      province.universities.map(university => formatUniversityName(university.name))
+    const allUniversityNames = provinceUniversities.flatMap((province) =>
+      province.universities.map((university) =>
+        formatUniversityName(university.name)
+      )
     );
-    allUniversityNames.sort((a,b)=>a.localeCompare(b,'tr-TR'));
+    allUniversityNames.sort((a, b) => a.localeCompare(b, "tr-TR"));
     setAllUniversities(allUniversityNames);
     setUniversities(allUniversityNames);
   }, []);
 
   const handleSearch = (text: string) => {
     setSearchText(text);
-    if (text.trim() === '') {
+    if (text.trim() === "") {
       setUniversities(allUniversities);
     } else {
-      const filteredUniversities = allUniversities.filter(university =>
-        university.toLocaleLowerCase('tr-TR').includes(text.toLocaleLowerCase('tr-TR'))
+      const filteredUniversities = allUniversities.filter((university) =>
+        university
+          .toLocaleLowerCase("tr-TR")
+          .includes(text.toLocaleLowerCase("tr-TR"))
       );
       setUniversities(filteredUniversities);
     }
   };
 
   const openModal = () => {
-    setSearchText('');
+    setSearchText("");
     setUniversities(allUniversities);
     setShowModal(true);
   };
@@ -78,11 +88,11 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({
 
   return (
     <>
-      <TouchableOpacity
-        onPress={openModal}
-        style={styles.selectContainer}
-      >
-        <Typo color={value ? colors.black : colors.neutral100} style={styles.placeholderText}>
+      <TouchableOpacity onPress={openModal} style={styles.selectContainer}>
+        <Typo
+          color={value ? colors.black : colors.neutral100}
+          style={styles.placeholderText}
+        >
           {value ? value : placeholder}
         </Typo>
         <Icons.CaretDown size={18} color={colors.black} />
@@ -96,7 +106,7 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({
                 <Icons.X size={24} color={colors.black} />
               </TouchableOpacity>
             </View>
-            
+
             <View style={styles.searchContainer}>
               <TextInput
                 style={styles.searchInput}
@@ -107,8 +117,11 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({
                 autoFocus
               />
             </View>
-            
-            <ScrollView style={styles.listContainer} showsVerticalScrollIndicator={true}>
+
+            <ScrollView
+              style={styles.listContainer}
+              showsVerticalScrollIndicator={true}
+            >
               {universities.length > 0 ? (
                 universities.map((university) => (
                   <TouchableOpacity
@@ -119,7 +132,9 @@ const UniversityPicker: React.FC<UniversityPickerProps> = ({
                     }}
                     style={styles.optionItem}
                   >
-                    <Typo color={colors.black} style={styles.optionText}>{university}</Typo>
+                    <Typo color={colors.black} style={styles.optionText}>
+                      {university}
+                    </Typo>
                   </TouchableOpacity>
                 ))
               ) : (
@@ -139,9 +154,9 @@ export default UniversityPicker;
 
 const styles = StyleSheet.create({
   selectContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     borderWidth: 1,
     borderColor: colors.neutral300,
     borderRadius: 12,
@@ -155,18 +170,18 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: colors.white,
     borderRadius: 12,
-    overflow: 'hidden',
+    overflow: "hidden",
     margin: spacingX._15,
-    maxHeight: '80%',
-    shadowColor: '#000',
+    maxHeight: "80%",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     paddingHorizontal: spacingX._10,
     paddingTop: spacingY._10,
   },
@@ -198,6 +213,6 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     padding: spacingY._20,
-    alignItems: 'center',
-  }
+    alignItems: "center",
+  },
 });

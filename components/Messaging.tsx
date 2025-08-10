@@ -11,6 +11,7 @@ import {
   onSnapshot,
   query,
   orderBy,
+  getDoc,
 } from "firebase/firestore";
 
 interface MessagingProps {
@@ -18,7 +19,8 @@ interface MessagingProps {
   currentUserId: string;
   username: string;
   receiverName: string;
-   receiverImage?: string;
+  receiverImage?: string;
+  receiverId?: string; // Alıcının ID'si için yeni prop
 }
 
 const Messaging: React.FC<MessagingProps> = ({
@@ -27,10 +29,12 @@ const Messaging: React.FC<MessagingProps> = ({
   username,
   receiverName,
   receiverImage,
+  receiverId,
 }) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isTypingText, setIsTypingText] = useState("");
+  const [chatExists, setChatExists] = useState<boolean | null>(null);
   const flatListRef = useRef<FlatList>(null);
 
   const formatDateLabel = (timestamp: number) => {
@@ -52,6 +56,20 @@ const Messaging: React.FC<MessagingProps> = ({
 
   useEffect(() => {
     if (!chatId) return;
+
+    // Chat'in var olup olmadığını kontrol et
+    const checkChatExists = async () => {
+      try {
+        const chatDocRef = doc(firestore, "chats", chatId);
+        const chatDoc = await getDoc(chatDocRef);
+        setChatExists(chatDoc.exists());
+      } catch (error) {
+        console.error("Chat kontrol hatası:", error);
+        setChatExists(false);
+      }
+    };
+
+    checkChatExists();
 
     const messagesRef = collection(firestore, "chats", chatId, "messages");
     const q = query(messagesRef, orderBy("timestamp"));
@@ -86,8 +104,33 @@ const Messaging: React.FC<MessagingProps> = ({
     }
   }, [messages]);
 
+  const createChatDocument = async () => {
+    if (!receiverId) return;
+
+    const chatDocRef = doc(firestore, "chats", chatId);
+    await setDoc(chatDocRef, {
+      participants: [currentUserId, receiverId],
+      participantNames: {
+        [currentUserId]: username,
+        [receiverId]: receiverName,
+      },
+      createdAt: Date.now(),
+      lastMessage: "",
+      updatedAt: Date.now(),
+      typingUser: "",
+      typingUsername: "",
+    });
+
+    setChatExists(true);
+  };
+
   const sendMessage = async () => {
     if (newMessage.trim() === "") return;
+
+    // Eğer chat henüz yoksa, oluştur
+    if (chatExists === false) {
+      await createChatDocument();
+    }
 
     const messageData = {
       text: newMessage,
@@ -115,6 +158,9 @@ const Messaging: React.FC<MessagingProps> = ({
   };
 
   const handleTyping = async () => {
+    // Eğer chat yoksa typing gösterme
+    if (chatExists === false) return;
+
     const chatDocRef = doc(firestore, "chats", chatId);
     await setDoc(
       chatDocRef,
@@ -127,6 +173,9 @@ const Messaging: React.FC<MessagingProps> = ({
   };
 
   const stopTyping = async () => {
+    // Eğer chat yoksa typing durdurma
+    if (chatExists === false) return;
+
     const chatDocRef = doc(firestore, "chats", chatId);
     await setDoc(
       chatDocRef,
@@ -140,6 +189,16 @@ const Messaging: React.FC<MessagingProps> = ({
   };
 
   const renderMessagesWithDate = () => {
+    if (messages.length === 0) {
+      return (
+        <View style={styles.emptyMessageContainer}>
+          <Text style={styles.emptyMessageText}>
+            Henüz mesaj yok. İlk mesajı gönderin!
+          </Text>
+        </View>
+      );
+    }
+
     const grouped: { [key: string]: any[] } = {};
 
     messages.forEach((msg) => {
@@ -229,5 +288,16 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: "hidden",
     marginVertical: 12,
+  },
+  emptyMessageContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 100,
+  },
+  emptyMessageText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
   },
 });

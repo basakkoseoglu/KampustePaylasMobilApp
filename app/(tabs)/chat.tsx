@@ -32,6 +32,7 @@ interface ChatPreview {
   lastMessage: string;
   updatedAt: number;
   otherUserImage?: string | null;
+  otherUserId?: string;
 }
 
 const formatTimestamp = (timestamp: number) => {
@@ -74,43 +75,91 @@ const ChatScreen: React.FC = () => {
             snapshot.docs.map(async (docSnap) => {
               const chatData = docSnap.data();
               const docRef = doc(firestore, "chats", docSnap.id);
-              const participantsInfo = Array.isArray(chatData.participantsInfo)
-                ? chatData.participantsInfo
-                : [];
 
-              console.log(`Processing chat ${docSnap.id}:`, participantsInfo);
+              console.log(`Processing chat ${docSnap.id}:`, chatData);
 
-              // Find current user and the other participant
-              const myInfo = participantsInfo.find(
-                (p: any) => p.id === currentUserId
-              );
-              const otherInfo = participantsInfo.find(
-                (p: any) => p.id !== currentUserId
-              );
+              let otherUserName = "Bilinmeyen";
+              let otherUserImage = null;
+              let otherUserId = null;
 
-              // Update current user's image if it has changed
-              if (myInfo && user?.image && myInfo.image !== user.image) {
-                console.log("Updating user image in chat");
-                const newParticipantsInfo = participantsInfo.map((p: any) =>
-                  p.id === currentUserId ? { ...p, image: user.image } : p
+              // Method 1: Check participantsInfo array (new format)
+              if (
+                Array.isArray(chatData.participantsInfo) &&
+                chatData.participantsInfo.length > 0
+              ) {
+                const myInfo = chatData.participantsInfo.find(
+                  (p: any) => p.id === currentUserId
+                );
+                const otherInfo = chatData.participantsInfo.find(
+                  (p: any) => p.id !== currentUserId
                 );
 
-                await updateDoc(docRef, {
-                  participantsInfo: newParticipantsInfo,
-                });
+                if (otherInfo) {
+                  otherUserName = otherInfo.name || "Bilinmeyen";
+                  otherUserImage = otherInfo.image || null;
+                  otherUserId = otherInfo.id;
+                }
+
+                // Update current user's image if it has changed
+                if (myInfo && user?.image && myInfo.image !== user.image) {
+                  console.log("Updating user image in chat");
+                  const newParticipantsInfo = chatData.participantsInfo.map(
+                    (p: any) =>
+                      p.id === currentUserId ? { ...p, image: user.image } : p
+                  );
+
+                  await updateDoc(docRef, {
+                    participantsInfo: newParticipantsInfo,
+                  });
+                }
               }
+              // Method 2: Check participantNames object (fallback format)
+              else if (
+                chatData.participantNames &&
+                typeof chatData.participantNames === "object"
+              ) {
+                const otherUserIdFromParticipants = chatData.participants?.find(
+                  (id: string) => id !== currentUserId
+                );
+                if (otherUserIdFromParticipants) {
+                  otherUserId = otherUserIdFromParticipants;
+                  otherUserName =
+                    chatData.participantNames[otherUserIdFromParticipants] ||
+                    "Bilinmeyen";
+                }
+              }
+              // Method 3: Fallback - extract from participants array
+              else if (
+                Array.isArray(chatData.participants) &&
+                chatData.participants.length >= 2
+              ) {
+                otherUserId = chatData.participants.find(
+                  (id: string) => id !== currentUserId
+                );
+                // If we have otherUserId but no name, we'll keep "Bilinmeyen" but at least we have the ID
+              }
+
+              console.log(
+                `Chat ${docSnap.id} - Other user: ${otherUserName} (ID: ${otherUserId})`
+              );
 
               return {
                 chatId: docSnap.id,
-                otherUserName: otherInfo?.name || "Bilinmeyen",
-                otherUserImage: otherInfo?.image,
+                otherUserName,
+                otherUserImage,
+                otherUserId,
                 lastMessage: chatData.lastMessage || "",
                 updatedAt: chatData.updatedAt || Date.now(),
               };
             })
           );
 
-          setChatList(updatedChats);
+          // Filter out chats where we couldn't identify the other user
+          const validChats = updatedChats.filter(
+            (chat) => chat.otherUserName !== "Bilinmeyen" || chat.otherUserId
+          );
+
+          setChatList(validChats);
         } catch (error) {
           console.error("Error processing chats:", error);
         } finally {
@@ -129,7 +178,8 @@ const ChatScreen: React.FC = () => {
   const goToChat = (
     chatId: string,
     otherUserName: string,
-    otherUserImage?: string | null
+    otherUserImage?: string | null,
+    otherUserId?: string
   ) => {
     router.push({
       pathname: "/MessagingScreen",
@@ -137,6 +187,7 @@ const ChatScreen: React.FC = () => {
         chatId,
         receiverName: otherUserName,
         receiverImage: otherUserImage || "",
+        receiverId: otherUserId || "",
       },
     });
   };
@@ -168,6 +219,14 @@ const ChatScreen: React.FC = () => {
     );
   };
 
+  const getInitials = (name: string) => {
+    if (!name || name === "Bilinmeyen") return "?";
+    const parts = name.trim().split(" ");
+    return parts.length >= 2
+      ? `${parts[0][0]}${parts[parts.length - 1][0]}`
+      : name.substring(0, 2);
+  };
+
   if (loading) {
     return (
       <View style={[styles.container, styles.centerContent]}>
@@ -196,7 +255,12 @@ const ChatScreen: React.FC = () => {
               <TouchableOpacity
                 style={{ flex: 1 }}
                 onPress={() =>
-                  goToChat(item.chatId, item.otherUserName, item.otherUserImage)
+                  goToChat(
+                    item.chatId,
+                    item.otherUserName,
+                    item.otherUserImage,
+                    item.otherUserId
+                  )
                 }
               >
                 <View style={styles.chatRow}>
@@ -209,12 +273,7 @@ const ChatScreen: React.FC = () => {
                       />
                     ) : (
                       <Text style={styles.avatarText}>
-                        {item.otherUserName
-                          .split(" ")
-                          .map((p) => p[0])
-                          .join("")
-                          .toUpperCase()
-                          .substring(0, 2)}
+                        {getInitials(item.otherUserName).toUpperCase()}
                       </Text>
                     )}
                   </View>

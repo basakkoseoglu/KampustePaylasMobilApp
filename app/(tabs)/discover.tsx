@@ -14,9 +14,8 @@ import provinceUniversities from "@/json/province-universities.json";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { query, where, setDoc } from "firebase/firestore";
+import { query, where } from "firebase/firestore";
 import { useAuth } from "@/contexts/authContext";
-import { startChat } from "@/services/chatService";
 import { Alert } from "react-native";
 import { Trash } from "phosphor-react-native";
 import { deleteDoc, doc } from "firebase/firestore";
@@ -38,6 +37,7 @@ const POST_TYPES = [
   { label: "Yardımlaşma", value: "volunteerAds" },
   { label: "Etkinlik", value: "eventAds" },
 ];
+
 const formatDate = (timestamp: number) => {
   const date = new Date(timestamp);
   return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
@@ -80,57 +80,64 @@ const Discover = () => {
   }, []);
 
   useEffect(() => {
-  if (user?.university) {
-    const formatted = user.university
-      .split(" ")
-      .map(w => w.charAt(0).toLocaleUpperCase("tr-TR") + w.slice(1).toLocaleLowerCase("tr-TR"))
-      .join(" ");
-    setSelectedUniversity(formatted);
-  }
-}, [user?.university]);
-
-useEffect(() => {
-  const fetchData = async () => {
-    const db = getFirestore();
-    const allData: Post[] = [];
-    const collections = ["loanAds", "notesAds", "volunteerAds", "eventAds"];
-
-    for (const name of collections) {
-      const ref = collection(db, name);
-      const q =
-        selectedUniversity && selectedUniversity !== "Tümü"
-          ? query(ref, where("ownerUniversity", "==", selectedUniversity))
-          : ref;
-
-      const snap = await getDocs(q);
-      snap.forEach((doc) => {
-        const d = doc.data() as any;
-        allData.push({
-          id: doc.id,
-          ownerId: d.ownerUid,
-          ownerName: d.ownerName,
-          ownerUniversity: d.ownerUniversity,
-          ownerImage: d.ownerImage || "",
-          title:
-            d.itemTitle || d.courseTitle || d.adTitle || d.ilanBasligi || "İlan",
-          type: name,
-          createdAt:
-            typeof d.createdAt === "number"
-              ? d.createdAt
-              : typeof d.createdAt?.toDate === "function"
-              ? d.createdAt.toDate().getTime()
-              : Date.now(),
-        });
-      });
+    if (user?.university) {
+      const formatted = user.university
+        .split(" ")
+        .map(
+          (w) =>
+            w.charAt(0).toLocaleUpperCase("tr-TR") +
+            w.slice(1).toLocaleLowerCase("tr-TR")
+        )
+        .join(" ");
+      setSelectedUniversity(formatted);
     }
+  }, [user?.university]);
 
-    allData.sort((a, b) => b.createdAt - a.createdAt);
-    setPosts(allData);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const db = getFirestore();
+      const allData: Post[] = [];
+      const collections = ["loanAds", "notesAds", "volunteerAds", "eventAds"];
 
-  fetchData();
-}, [selectedUniversity]); 
+      for (const name of collections) {
+        const ref = collection(db, name);
+        const q =
+          selectedUniversity && selectedUniversity !== "Tümü"
+            ? query(ref, where("ownerUniversity", "==", selectedUniversity))
+            : ref;
 
+        const snap = await getDocs(q);
+        snap.forEach((doc) => {
+          const d = doc.data() as any;
+          allData.push({
+            id: doc.id,
+            ownerId: d.ownerUid,
+            ownerName: d.ownerName,
+            ownerUniversity: d.ownerUniversity,
+            ownerImage: d.ownerImage || "",
+            title:
+              d.itemTitle ||
+              d.courseTitle ||
+              d.adTitle ||
+              d.ilanBasligi ||
+              "İlan",
+            type: name,
+            createdAt:
+              typeof d.createdAt === "number"
+                ? d.createdAt
+                : typeof d.createdAt?.toDate === "function"
+                ? d.createdAt.toDate().getTime()
+                : Date.now(),
+          });
+        });
+      }
+
+      allData.sort((a, b) => b.createdAt - a.createdAt);
+      setPosts(allData);
+    };
+
+    fetchData();
+  }, [selectedUniversity]);
 
   const filteredPosts = posts.filter((post) => {
     const matchesType = selectedType === null || post.type === selectedType;
@@ -157,6 +164,7 @@ useEffect(() => {
       },
     });
   };
+
   const handleDeletePost = async (postId: string, type: string) => {
     Alert.alert("İlanı Sil", "Bu ilanı silmek istediğinize emin misiniz?", [
       { text: "İptal", style: "cancel" },
@@ -177,22 +185,19 @@ useEffect(() => {
 
   const handleStartChat = async (post: Post) => {
     if (!user?.uid || !user?.name) return;
-    const chatId = await startChat({
-      currentUserId: user?.uid,
-      currentUserName: user?.name,
-      currentUserImage: user?.image,
-      receiverId: post.ownerId,
-      receiverName: post.ownerName,
-      receiverImage: post?.ownerImage,
-    });
+
+    // Chat ID'si oluştur ama henüz Firestore'a kaydetme
+    const chatId = [user.uid, post.ownerId].sort().join("_");
 
     router.push({
       pathname: "/MessagingScreen",
       params: {
         chatId,
         receiverName: post.ownerName,
+        receiverImage: post?.ownerImage,
         currentUserId: user?.uid,
         username: user?.name,
+        receiverId: post.ownerId, // Alıcının ID'si
       },
     });
   };

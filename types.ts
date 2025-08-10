@@ -68,8 +68,6 @@ export type BackButtonProps = {
   iconSize?: number;
 };
 
-
-
 export interface InputProps extends TextInputProps {
   icon?: React.ReactNode;
   containerStyle?: ViewStyle;
@@ -97,39 +95,38 @@ export type ImageUploadProps = {
 
 /** Kullanıcı bilgilerini temsil eden tür */
 export type UserType = {
-    uid?: string;
-    email?: string | null;
-    name?: string | null;
-    university?: string;
-    department?: string;
-    image?: string;
-    gender?:string;
-  } |null;
+  uid?: string;
+  email?: string | null;
+  name?: string | null;
+  university?: string;
+  department?: string;
+  image?: string;
+  gender?: string;
+} | null;
 
-  /** İlan türü */
+/** İlan türü */
 export type ListingType = {
-    id: string;
-    title: string;
-    description: string;
-    category: "Ders Notları" | "Kitap" | "Eşya" | "Gönüllü Yardım";
-    ownerId: string;
-    createdAt: Date;
-    images?: string[];
-    contactMethod: "Email" | "Telefon";
-    status: "Aktif" | "Pasif";
-  };
+  id: string;
+  title: string;
+  description: string;
+  category: "Ders Notları" | "Kitap" | "Eşya" | "Gönüllü Yardım";
+  ownerId: string;
+  createdAt: Date;
+  images?: string[];
+  contactMethod: "Email" | "Telefon";
+  status: "Aktif" | "Pasif";
+};
 export type UserDataType = {
   name: string;
   image?: any;
-  university?:string;
-  department?:string;
-  gender?:string;
+  university?: string;
+  department?: string;
+  gender?: string;
 };
 
-
 export type AuthContextType = {
-  user: UserType;
-  setUser: Function;
+  user: UserType | null;
+  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   login: (
     email: string,
     password: string
@@ -137,9 +134,10 @@ export type AuthContextType = {
   register: (
     email: string,
     password: string,
-    name: string
+    name: string,
+    university?: string
   ) => Promise<{ success: boolean; msg?: string }>;
-  updateUserData: (userId: string) => Promise<void>;
+  updateUserData: (uid: string) => Promise<void>;
 };
 
 export type ResponseType = {
