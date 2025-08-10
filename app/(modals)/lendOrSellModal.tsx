@@ -201,7 +201,6 @@ const LendOrSellModal = () => {
               iconSize={30}
               style={{
                 backgroundColor: "#7AA9CFFF",
-                padding: 0,
                 marginRight: 8,
               }}
             />
@@ -231,7 +230,7 @@ const LendOrSellModal = () => {
                 <Text style={styles.label}>İsim</Text>
               </View>
               <TextInput
-                style={styles.input}
+                style={styles.inputNoShadow}
                 value={ownerName}
                 editable={false}
               />
@@ -248,7 +247,7 @@ const LendOrSellModal = () => {
                 <Text style={styles.label}>Üniversite</Text>
               </View>
               <TextInput
-                style={styles.input}
+                style={styles.inputNoShadow}
                 value={schoolInfo}
                 editable={false}
               />
@@ -459,7 +458,6 @@ const LendOrSellModal = () => {
     </KeyboardAvoidingView>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -474,6 +472,7 @@ const styles = StyleSheet.create({
     color: "#7AA9CFFF",
     textAlign: "center",
     marginBottom: 8,
+    marginLeft: 20,
   },
   subTitle: {
     fontSize: 14,
@@ -492,12 +491,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     padding: 16,
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    elevation: 1,
   },
   cardHeaderRow: {
     flexDirection: "row",
@@ -534,21 +528,11 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 14,
     color: "#333",
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    elevation: 8,
   },
   descriptionContainer: {
     backgroundColor: "#fff",
     borderRadius: 8,
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
     elevation: 1,
   },
   descriptionInput: {
@@ -579,11 +563,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     width: 180,
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
     elevation: 1,
   },
   dropdownButtonText: {
@@ -620,10 +599,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: "80%",
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
     elevation: 5,
   },
   dropdownItem: {
@@ -641,15 +616,9 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 14,
     color: "#333",
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-    // Çok satırlı yapı için minimum yüksekliği biraz artırıyoruz
     minHeight: 80,
     textAlignVertical: "top",
+    elevation: 5,
   },
   titleRow: {
     flexDirection: "row",
@@ -657,6 +626,14 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginTop: 16,
     paddingHorizontal: 16,
+  },
+  inputNoShadow: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    color: "#333",
+    elevation: 0,
   },
 });
 

@@ -223,7 +223,7 @@ const VolunteerHelpModal = () => {
                 <Text style={styles.label}>İsim</Text>
               </View>
               <TextInput
-                style={styles.input}
+                style={styles.inputNoShadow}
                 value={ownerName}
                 editable={false}
               />
@@ -239,7 +239,7 @@ const VolunteerHelpModal = () => {
                 <Text style={styles.label}>Üniversite</Text>
               </View>
               <TextInput
-                style={styles.input}
+                style={styles.inputNoShadow}
                 value={schoolInfo}
                 editable={false}
               />
@@ -356,7 +356,10 @@ const VolunteerHelpModal = () => {
                 />
                 <Text style={styles.label}>Tarih</Text>
               </View>
-              <TouchableOpacity style={styles.input} onPress={showDatePicker}>
+              <TouchableOpacity
+                style={styles.inputnewShadow}
+                onPress={showDatePicker}
+              >
                 <Text style={{ color: eventDate ? "#333" : "#999" }}>
                   {eventDate || "Tarih Seçin"}
                 </Text>
@@ -421,7 +424,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#FFCC80",
-    marginTop: 16,
+    marginTop: 5,
     textAlign: "center",
     marginBottom: 8,
   },
@@ -430,6 +433,7 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     marginBottom: 16,
+    paddingHorizontal: 15,
   },
   card: {
     backgroundColor: "#fff",
@@ -437,11 +441,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     padding: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    elevation: 1,
   },
   cardHeaderRow: {
     flexDirection: "row",
@@ -478,11 +478,7 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 14,
     color: "#333",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    elevation: 8,
   },
   descriptionContainer: {
     backgroundColor: "#fff",
@@ -605,6 +601,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 16,
+  },
+  inputNoShadow: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    color: "#333",
+    elevation: 0,
+  },
+  inputnewShadow: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    color: "#333",
+    elevation: 1,
   },
 });
 

@@ -167,11 +167,12 @@ const ProfileModal = () => {
             <View style={styles.inputContainer}>
               <Typo color={colors.black}>İsim</Typo>
               <TextInputField
-                placeholder="İsim"
+                placeholder={userData.name ? "" : "İsim"}
                 value={userData.name}
                 onChangeText={(value) =>
                   setUserData({ ...userData, name: value })
                 }
+                style={{ paddingTop: verticalScale(2) }}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -186,11 +187,12 @@ const ProfileModal = () => {
             <View style={styles.inputContainer}>
               <Typo color={colors.black}>Bölüm </Typo>
               <TextInputField
-                placeholder="Bölüm"
+                placeholder={userData.department ? "" : "Bölüm"}
                 value={userData.department}
                 onChangeText={(value) =>
                   setUserData({ ...userData, department: value })
                 }
+                style={{ paddingTop: verticalScale(2) }}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -270,7 +272,6 @@ const styles = StyleSheet.create({
     paddingTop: spacingY._15,
     borderTopColor: colors.neutral800,
     marginBottom: spacingY._5,
-    borderTopWidth: 1,
   },
   form: {
     gap: spacingY._25,
@@ -295,10 +296,6 @@ const styles = StyleSheet.create({
     right: spacingY._7,
     borderRadius: 100,
     backgroundColor: colors.neutral100,
-    shadowColor: colors.black,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
     elevation: 4,
     padding: spacingY._7,
   },

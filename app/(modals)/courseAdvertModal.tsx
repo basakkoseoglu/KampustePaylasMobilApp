@@ -207,11 +207,7 @@ const CourseAdvertModal = () => {
                 />
                 <Text style={styles.label}>İsim</Text>
               </View>
-              <TextInput
-                style={styles.input}
-                value={ownerName}
-                editable={false}
-              />
+              <TextInput value={ownerName} editable={false} />
             </View>
 
             {/* Üniversite */}
@@ -224,11 +220,7 @@ const CourseAdvertModal = () => {
                 />
                 <Text style={styles.label}>Üniversite</Text>
               </View>
-              <TextInput
-                style={styles.input}
-                value={schoolInfo}
-                editable={false}
-              />
+              <TextInput value={schoolInfo} editable={false} />
             </View>
           </View>
 
@@ -421,7 +413,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#79A57BFF",
-    marginTop: 16,
+    marginTop: 7,
     textAlign: "center",
     marginBottom: 8,
   },
@@ -437,12 +429,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     padding: 16,
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    elevation: 1,
   },
   // Kart Başlığında İkon ve Metin Aynı Satır
   cardHeaderRow: {
@@ -458,9 +445,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#FF9800",
   },
-  inputWrapper: {
-    marginBottom: 12,
-  },
+
   // Label Satırında İkon ve Metin Aynı Hizada
   labelRow: {
     flexDirection: "row",
@@ -474,6 +459,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#555",
     fontWeight: "500",
+    marginBottom: 10,
   },
   input: {
     backgroundColor: "#fff",
@@ -481,23 +467,40 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 14,
     color: "#333",
-    // Gölge
+    // Açıklama alanıyla aynı gölge efekti:
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 10,
+  },
+
+  dropdownButton: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: 180,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
     elevation: 1,
   },
+
+  inputWrapper: {
+    marginBottom: 16, // biraz daha boşluk ekledim
+  },
+
   descriptionContainer: {
     backgroundColor: "#fff",
     borderRadius: 8,
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    elevation: 2,
   },
+
   descriptionInput: {
     padding: 12,
     fontSize: 14,
@@ -505,7 +508,7 @@ const styles = StyleSheet.create({
     minHeight: 100,
     textAlignVertical: "top",
   },
-  // Ek Bilgiler İçindeki Satırlarda da İkon + Metin Hizalaması
+
   optionContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -519,25 +522,7 @@ const styles = StyleSheet.create({
     width: 100,
     marginRight: 12,
   },
-  dropdownButton: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    //kenarlarına netleştirip büyütüypr
-    // borderWidth:1,
-    // borderColor:'#ccc',
-    width: 180,
-    // Gölge
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
+
   dropdownButtonText: {
     fontSize: 14,
     color: colors.neutral400,

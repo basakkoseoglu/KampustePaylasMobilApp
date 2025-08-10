@@ -253,7 +253,7 @@ const CampusEventModal = () => {
                 <Text style={styles.label}>İsim</Text>
               </View>
               <TextInput
-                style={styles.input}
+                style={styles.inputNoShadow}
                 value={ownerName}
                 editable={false}
               />
@@ -269,7 +269,7 @@ const CampusEventModal = () => {
                 <Text style={styles.label}>Üniversite</Text>
               </View>
               <TextInput
-                style={styles.input}
+                style={styles.inputNoShadow}
                 value={schoolInfo}
                 editable={false}
               />
@@ -400,7 +400,10 @@ const CampusEventModal = () => {
                 />
                 <Text style={styles.label}>Etkinlik Tarihi</Text>
               </View>
-              <TouchableOpacity style={styles.input} onPress={showDatePicker}>
+              <TouchableOpacity
+                style={styles.inputnewShadow}
+                onPress={showDatePicker}
+              >
                 <Text style={{ color: etkinlikTarihi ? "#333" : "#999" }}>
                   {etkinlikTarihi || "Tarih Seçin"}
                 </Text>
@@ -421,7 +424,10 @@ const CampusEventModal = () => {
                 <Icons.Clock size={20} color="#555" style={styles.labelIcon} />
                 <Text style={styles.label}>Etkinlik Saati</Text>
               </View>
-              <TouchableOpacity style={styles.input} onPress={showTimePicker}>
+              <TouchableOpacity
+                style={styles.inputnewShadow}
+                onPress={showTimePicker}
+              >
                 <Text style={{ color: etkinlikSaati ? "#333" : "#999" }}>
                   {etkinlikSaati || "Saat Seçin"}
                 </Text>
@@ -484,7 +490,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#8A70B8FF",
-    marginTop: 16,
+    marginTop: 8,
     textAlign: "center",
     marginBottom: 8,
   },
@@ -493,6 +499,7 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     marginBottom: 16,
+    paddingHorizontal: 2,
   },
   card: {
     backgroundColor: "#fff",
@@ -500,11 +507,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginBottom: 16,
     padding: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    elevation: 1,
   },
   cardHeaderRow: {
     flexDirection: "row",
@@ -541,19 +544,11 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 14,
     color: "#333",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    elevation: 8,
   },
   descriptionContainer: {
     backgroundColor: "#fff",
     borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
     elevation: 1,
   },
   descriptionInput: {
@@ -572,10 +567,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
     elevation: 1,
   },
   dropdownButtonTextLeft: {
@@ -617,7 +608,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
   },
   dropdownItem: {
     padding: 16,
@@ -634,6 +624,22 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     // marginTop: 16,
     paddingHorizontal: 16,
+  },
+  inputNoShadow: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    color: "#333",
+    elevation: 0,
+  },
+  inputnewShadow: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    color: "#333",
+    elevation: 1,
   },
 });
 
