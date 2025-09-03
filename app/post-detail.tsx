@@ -63,7 +63,7 @@ const PostDetail = () => {
       {loading ? (
         <ActivityIndicator
           size="large"
-          color={colors.primary}
+          color={colors.primaryLight}
           style={{ marginTop: 40 }}
         />
       ) : (
@@ -88,7 +88,7 @@ const PostDetail = () => {
 export default PostDetail;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.white },
+  container: { flex: 1 },
   scroll: { padding: 16 },
   header: {
     fontSize: 20,
@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     marginRight: 12,
-    padding:4,
+    padding: 4,
   },
 });

@@ -54,22 +54,22 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    borderRadius: 999, 
+    borderRadius: 999,
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 5,
     fontSize: 16,
     backgroundColor: "#f2f2f2",
     color: "#000",
     marginRight: 8,
+    height: 50,
   },
 
- sendButton: {
-  marginLeft: 8,
-  backgroundColor: '#84A06E',
-  borderRadius: 20,
-  padding: 10,
-  justifyContent: 'center',
-  alignItems: 'center',
-},
-
+  sendButton: {
+    marginLeft: 8,
+    backgroundColor: "#188040",
+    borderRadius: 20,
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

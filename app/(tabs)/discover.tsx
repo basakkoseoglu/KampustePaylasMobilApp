@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { colors } from "@/constants/theme";
@@ -55,6 +56,7 @@ const Discover = () => {
   const [allUniversities, setAllUniversities] = useState<string[]>([]);
   const [universitySearchText, setUniversitySearchText] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true); // loading state
   const { user } = useAuth();
 
   useEffect(() => {
@@ -95,6 +97,7 @@ const Discover = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const db = getFirestore();
       const allData: Post[] = [];
       const collections = ["loanAds", "notesAds", "volunteerAds", "eventAds"];
@@ -134,6 +137,7 @@ const Discover = () => {
 
       allData.sort((a, b) => b.createdAt - a.createdAt);
       setPosts(allData);
+      setLoading(false);
     };
 
     fetchData();
@@ -185,8 +189,6 @@ const Discover = () => {
 
   const handleStartChat = async (post: Post) => {
     if (!user?.uid || !user?.name) return;
-
-    // Chat ID'si oluştur ama henüz Firestore'a kaydetme
     const chatId = [user.uid, post.ownerId].sort().join("_");
 
     router.push({
@@ -197,7 +199,7 @@ const Discover = () => {
         receiverImage: post?.ownerImage,
         currentUserId: user?.uid,
         username: user?.name,
-        receiverId: post.ownerId, // Alıcının ID'si
+        receiverId: post.ownerId,
       },
     });
   };
@@ -243,32 +245,59 @@ const Discover = () => {
           </View>
         </View>
       </View>
-      <Text style={styles.postTitle}>{item.title}</Text>
-      {user?.uid === item.ownerId && (
-        <TouchableOpacity
-          onPress={() => handleDeletePost(item.id, item.type)}
-          style={{ alignSelf: "flex-end", marginBottom: 8 }}
-        >
-          <Trash size={20} color="#D32F2F" />
-        </TouchableOpacity>
-      )}
+
+      {/* Başlık + filtre ikonu */}
+      <View style={styles.titleRow}>
+        <Text style={styles.postTitle}>{item.title}</Text>
+      </View>
 
       <View style={styles.cardFooter}>
         <TouchableOpacity onPress={() => handlePostPress(item)}>
           <Text style={styles.detailsText}>Detayları görüntüle</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.contactButton}
-          onPress={() => handleStartChat(item)}
-        >
-          <Text style={styles.contactButtonText}>İlgileniyorum</Text>
-        </TouchableOpacity>
+
+        {user?.uid === item.ownerId ? (
+          <TouchableOpacity
+            onPress={() => handleDeletePost(item.id, item.type)}
+          >
+            <Trash size={20} color="#ff9800" />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.contactButton}
+            onPress={() => handleStartChat(item)}
+          >
+            <Text style={styles.contactButtonText}>İlgileniyorum</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
 
+  if (loading) {
+    return (
+      <ScreenWrapper style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#188040" />
+          <Text style={styles.loadingText}>İlanlar yükleniyor...</Text>
+        </View>
+      </ScreenWrapper>
+    );
+  }
+
   return (
     <ScreenWrapper style={styles.container}>
+      <Text
+        style={{
+          fontSize: 24,
+          fontWeight: "600",
+          textAlign: "center",
+          color: colors.black,
+        }}
+      >
+        İlanlar
+      </Text>
+
       {/* Üniversite seçici */}
       <View style={styles.universityPickerContainer}>
         <TouchableOpacity
@@ -379,14 +408,8 @@ const Discover = () => {
 export default Discover;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  universityPickerContainer: {
-    marginBottom: 12,
-    padding: 16,
-  },
+  container: { flex: 1, backgroundColor: "#f5f5f5" },
+  universityPickerContainer: { padding: 16 },
   selectContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -398,14 +421,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: colors.white,
   },
-  selectText: {
-    fontSize: 14,
-    color: colors.black,
-  },
-  placeholderText: {
-    fontSize: 14,
-    color: colors.neutral300,
-  },
+  selectText: { fontSize: 14, color: colors.black },
+  placeholderText: { fontSize: 14, color: colors.neutral300 },
   searchInput: {
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -432,13 +449,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral100,
   },
-  dropdownItemText: {
-    fontSize: 16,
-  },
-  typeContainer: {
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
+  dropdownItemText: { fontSize: 16 },
+  typeContainer: { paddingHorizontal: 16, marginBottom: 12 },
   typeButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -450,10 +462,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     backgroundColor: "white",
   },
-  typeButtonText: {
-    fontSize: 16,
-    color: colors.neutral300,
-  },
+  typeButtonText: { fontSize: 16, color: colors.neutral300 },
   typeModal: {
     marginTop: 4,
     backgroundColor: "white",
@@ -469,12 +478,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.neutral200,
   },
-  typeOptionText: {
-    fontSize: 16,
-  },
-  postsList: {
-    padding: 16,
-  },
+  typeOptionText: { fontSize: 16 },
+  postsList: { padding: 16 },
   postCard: {
     backgroundColor: "white",
     borderRadius: 12,
@@ -497,9 +502,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     width: "100%",
   },
-  userInfoContainer: {
-    flex: 1,
-  },
+  userInfoContainer: { flex: 1 },
   avatar: {
     width: 36,
     height: 36,
@@ -509,54 +512,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 12,
   },
-  avatarText: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  avatarImage: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-  },
+  avatarText: { fontSize: 14, fontWeight: "bold" },
+  avatarImage: { width: 36, height: 36, borderRadius: 18 },
   userRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
   },
-  userDetails: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  universityRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  universityText: {
-    fontSize: 11,
-    color: colors.neutral400,
-  },
-  dateContainer: {
-    alignItems: "flex-end",
-    minWidth: 100,
-  },
-  dateLabel: {
-    fontSize: 11,
-    color: "#888",
-    textAlign: "right",
-  },
+  userDetails: { flex: 1 },
+  userName: { fontSize: 13, fontWeight: "600" },
+  universityRow: { flexDirection: "row", alignItems: "center" },
+  universityText: { fontSize: 11, color: colors.neutral400 },
+  dateContainer: { alignItems: "flex-end", minWidth: 100 },
+  dateLabel: { fontSize: 11, color: "#888", textAlign: "right" },
   dateText: {
     fontSize: 12,
     fontWeight: "600",
     color: "#333",
     textAlign: "right",
   },
-  postTitle: {
-    fontSize: 16,
-    marginBottom: 16,
-  },
+  titleRow: { flexDirection: "row", alignItems: "center", marginBottom: 8 },
+  postTitle: { fontSize: 16 },
   cardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -573,8 +549,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 8,
   },
-  contactButtonText: {
-    color: "white",
-    fontWeight: "600",
-  },
+  contactButtonText: { color: "white", fontWeight: "600" },
+  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
+  loadingText: { marginTop: 12, fontSize: 16, color: colors.neutral400 },
 });

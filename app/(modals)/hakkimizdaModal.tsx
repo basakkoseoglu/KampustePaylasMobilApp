@@ -51,8 +51,8 @@ const AboutScreen = () => {
               </BulletItem>
               <BulletItem>
                 <Text>
-                  <Text style={styles.bold}>İkinci el eşyalarını</Text> satabilir
-                  veya kiraya verebilir.
+                  <Text style={styles.bold}>İkinci el eşyalarını</Text>{" "}
+                  satabilir veya kiraya verebilir.
                 </Text>
               </BulletItem>
               <BulletItem>
@@ -86,7 +86,8 @@ const AboutScreen = () => {
               </BulletItem>
               <BulletItem>
                 Tüm işlemlerde <Text style={styles.bold}>güvenli ödeme</Text> ve{" "}
-                <Text style={styles.bold}>teslim yöntemlerini</Text> tercih edin.
+                <Text style={styles.bold}>teslim yöntemlerini</Text> tercih
+                edin.
               </BulletItem>
               <BulletItem>
                 İlanlarınız ve mesajlarınızda{" "}
@@ -104,7 +105,6 @@ const AboutScreen = () => {
               onPress={handleSupportPress}
               activeOpacity={0.8}
             >
-              <Icons.EnvelopeSimple size={20} color="#fff" weight="bold" />
               <Text style={styles.ctaText}>Destek ile İletişime Geç</Text>
             </TouchableOpacity>
 

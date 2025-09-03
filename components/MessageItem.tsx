@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   myMessage: {
-    backgroundColor: "#84A06E",
+    backgroundColor: "#188040",
     alignSelf: "flex-end",
     borderTopRightRadius: 0,
   },

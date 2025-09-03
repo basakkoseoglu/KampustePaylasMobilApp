@@ -39,11 +39,19 @@ const formatTimestamp = (timestamp: number) => {
   const date = new Date(timestamp);
   const now = new Date();
   const sameDay = date.toDateString() === now.toDateString();
+
   if (sameDay)
     return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
+
   const diff = now.getTime() - date.getTime();
+
   if (diff < 1000 * 60 * 60 * 24 * 2) return "Dün";
-  return `${date.getDate()}/${date.getMonth() + 1}`;
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}.${month}.${year}`;
 };
 
 const ChatScreen: React.FC = () => {
@@ -296,7 +304,7 @@ const ChatScreen: React.FC = () => {
                 onPress={() => handleDeleteChat(item.chatId)}
                 style={styles.trashButton}
               >
-                <Trash size={20} color="#D32F2F" />
+                <Text>X</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -370,6 +378,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginRight: 12,
+    marginLeft: 10,
   },
   avatarText: {
     fontSize: 16,
@@ -395,6 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#888",
     alignSelf: "flex-start",
+    marginBottom: 20,
   },
   lastMessage: {
     fontSize: 14,
@@ -402,7 +412,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   trashButton: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    position: "absolute",
+    left: 8,
   },
 });

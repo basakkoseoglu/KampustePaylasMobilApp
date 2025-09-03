@@ -223,12 +223,14 @@ const CampusEventModal = () => {
             <BackButton
               iconSize={30}
               style={{
-                backgroundColor: "#9C88B8",
+                backgroundColor: "#424242",
                 padding: 4,
-                marginRight: 8,
+                marginRight: 16,
               }}
             />
-            <Text style={styles.mainTitle}>Kampüs İçi Etkinlik&Duyurular</Text>
+            <Text style={styles.mainTitle}>
+              Kampüs İçi Etkinlik & Duyurular
+            </Text>
           </View>
 
           <Text style={styles.subTitle}>
@@ -489,7 +491,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#8A70B8FF",
+    color: "#424242",
     marginTop: 8,
     textAlign: "center",
     marginBottom: 8,
@@ -582,7 +584,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   publishButton: {
-    backgroundColor: "#8C6BC6FF",
+    backgroundColor: "#424242",
     borderRadius: 8,
     padding: 16,
     alignItems: "center",

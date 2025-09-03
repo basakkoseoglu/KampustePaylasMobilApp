@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import MessageItem from "./MessageItem";
 import MessageInput from "./MessageInput";
 import { firestore } from "@/config/firebase";
@@ -20,7 +26,7 @@ interface MessagingProps {
   username: string;
   receiverName: string;
   receiverImage?: string;
-  receiverId?: string; // Alıcının ID'si için yeni prop
+  receiverId?: string;
 }
 
 const Messaging: React.FC<MessagingProps> = ({
@@ -35,6 +41,7 @@ const Messaging: React.FC<MessagingProps> = ({
   const [newMessage, setNewMessage] = useState("");
   const [isTypingText, setIsTypingText] = useState("");
   const [chatExists, setChatExists] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true); // loading state
   const flatListRef = useRef<FlatList>(null);
 
   const formatDateLabel = (timestamp: number) => {
@@ -57,7 +64,6 @@ const Messaging: React.FC<MessagingProps> = ({
   useEffect(() => {
     if (!chatId) return;
 
-    // Chat'in var olup olmadığını kontrol et
     const checkChatExists = async () => {
       try {
         const chatDocRef = doc(firestore, "chats", chatId);
@@ -80,6 +86,7 @@ const Messaging: React.FC<MessagingProps> = ({
         ...doc.data(),
       }));
       setMessages(fetched);
+      setLoading(false); // mesajlar yüklendiğinde
     });
 
     const chatDocRef = doc(firestore, "chats", chatId);
@@ -127,7 +134,6 @@ const Messaging: React.FC<MessagingProps> = ({
   const sendMessage = async () => {
     if (newMessage.trim() === "") return;
 
-    // Eğer chat henüz yoksa, oluştur
     if (chatExists === false) {
       await createChatDocument();
     }
@@ -158,7 +164,6 @@ const Messaging: React.FC<MessagingProps> = ({
   };
 
   const handleTyping = async () => {
-    // Eğer chat yoksa typing gösterme
     if (chatExists === false) return;
 
     const chatDocRef = doc(firestore, "chats", chatId);
@@ -173,7 +178,6 @@ const Messaging: React.FC<MessagingProps> = ({
   };
 
   const stopTyping = async () => {
-    // Eğer chat yoksa typing durdurma
     if (chatExists === false) return;
 
     const chatDocRef = doc(firestore, "chats", chatId);
@@ -192,9 +196,7 @@ const Messaging: React.FC<MessagingProps> = ({
     if (messages.length === 0) {
       return (
         <View style={styles.emptyMessageContainer}>
-          <Text style={styles.emptyMessageText}>
-            Henüz mesaj yok. İlk mesajı gönderin!
-          </Text>
+          <Text style={styles.emptyMessageText}>İlk mesajı gönderin!</Text>
         </View>
       );
     }
@@ -229,14 +231,21 @@ const Messaging: React.FC<MessagingProps> = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        data={[]} // empty, since we're rendering manually
-        ListHeaderComponent={<>{renderMessagesWithDate()}</>}
-        renderItem={null}
-        contentContainerStyle={styles.messagesList}
-        keyboardShouldPersistTaps="handled"
-      />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#4CAF50" />
+          <Text style={styles.loadingText}>Mesajlar yükleniyor...</Text>
+        </View>
+      ) : (
+        <FlatList
+          ref={flatListRef}
+          data={[]} // empty, since we're rendering manually
+          ListHeaderComponent={<>{renderMessagesWithDate()}</>}
+          renderItem={null}
+          contentContainerStyle={styles.messagesList}
+          keyboardShouldPersistTaps="handled"
+        />
+      )}
 
       {isTypingText ? (
         <View style={styles.typingContainer}>
@@ -299,5 +308,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
     textAlign: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#666",
   },
 });

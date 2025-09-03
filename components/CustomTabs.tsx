@@ -1,49 +1,57 @@
-import { View, Platform, TouchableOpacity,StyleSheet } from 'react-native';
-import { useLinkBuilder, useTheme } from '@react-navigation/native';
-import { Text, PlatformPressable } from '@react-navigation/elements';
-import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { colors, spacingY } from '@/constants/theme';
-import { verticalScale } from '@/utils/styling';
-import * as Icons from 'phosphor-react-native';
+import { View, Platform, TouchableOpacity, StyleSheet } from "react-native";
+import { useLinkBuilder, useTheme } from "@react-navigation/native";
+import { Text, PlatformPressable } from "@react-navigation/elements";
+import {
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
+import { colors, spacingY } from "@/constants/theme";
+import { verticalScale } from "@/utils/styling";
+import * as Icons from "phosphor-react-native";
 
-export default function CustomTabs({ 
-    state, 
-    descriptors, 
-    navigation 
-}:BottomTabBarProps) {
-
-    const tabbarIcons:any={
-        index:(isFocused:boolean)=>(
-            <Icons.CalendarBlank
-            size={verticalScale(28)}
-            weight={isFocused ? "fill" :"regular"}
-            color={isFocused ? colors.primary: colors.primaryLight}
-         />
-        ),
-        discover:(isFocused:boolean)=>(
-            <Icons.Megaphone
-            size={verticalScale(28)}
-            weight={isFocused ? "fill" :"regular"}
-            color={isFocused ? colors.primary: colors.primaryLight}
-         />
-        ),
-        chat:(isFocused:boolean)=>(
-            <Icons.ChatCircleDots
-            size={verticalScale(30)}
-            weight={isFocused ? "fill" :"regular"}
-            color={isFocused ? colors.primary : colors.primaryLight}
-         />
-        ),
-        profile:(isFocused:boolean)=>(
-            <Icons.UserCircle
-            size={verticalScale(32)}
-            weight={isFocused ? "fill" :"regular"}
-            color={isFocused ? colors.primary : colors.primaryLight}
-         />
-        ),
-
-    }
-
+export default function CustomTabs({
+  state,
+  descriptors,
+  navigation,
+}: BottomTabBarProps) {
+  const tabbarIcons: any = {
+    index: (isFocused: boolean) => (
+      <View style={{ transform: [{ scale: isFocused ? 1.3 : 1 }] }}>
+        <Icons.CalendarBlank
+          size={verticalScale(28)}
+          weight={isFocused ? "fill" : "regular"}
+          color={colors.primaryLight}
+        />
+      </View>
+    ),
+    discover: (isFocused: boolean) => (
+      <View style={{ transform: [{ scale: isFocused ? 1.3 : 1 }] }}>
+        <Icons.Megaphone
+          size={verticalScale(28)}
+          weight={isFocused ? "fill" : "regular"}
+          color={colors.primaryLight}
+        />
+      </View>
+    ),
+    chat: (isFocused: boolean) => (
+      <View style={{ transform: [{ scale: isFocused ? 1.3 : 1 }] }}>
+        <Icons.ChatCircleDots
+          size={verticalScale(30)}
+          weight={isFocused ? "fill" : "regular"}
+          color={colors.primaryLight}
+        />
+      </View>
+    ),
+    profile: (isFocused: boolean) => (
+      <View style={{ transform: [{ scale: isFocused ? 1.2 : 1 }] }}>
+        <Icons.UserCircle
+          size={verticalScale(32)}
+          weight={isFocused ? "fill" : "regular"}
+          color={colors.primaryLight}
+        />
+      </View>
+    ),
+  };
 
   return (
     <View style={styles.tabbar}>
@@ -53,14 +61,14 @@ export default function CustomTabs({
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-              ? options.title
-              : route.name;
+            ? options.title
+            : route.name;
 
         const isFocused = state.index === index;
 
         const onPress = () => {
           const event = navigation.emit({
-            type: 'tabPress',
+            type: "tabPress",
             target: route.key,
             canPreventDefault: true,
           });
@@ -72,7 +80,7 @@ export default function CustomTabs({
 
         const onLongPress = () => {
           navigation.emit({
-            type: 'tabLongPress',
+            type: "tabLongPress",
             target: route.key,
           });
         };
@@ -88,29 +96,27 @@ export default function CustomTabs({
             onLongPress={onLongPress}
             style={styles.tabbarItem}
           >
-            {
-                tabbarIcons[route.name] && tabbarIcons[route.name](isFocused)
-            }
+            {tabbarIcons[route.name] && tabbarIcons[route.name](isFocused)}
           </TouchableOpacity>
         );
       })}
     </View>
   );
 }
- const styles= StyleSheet.create({
-    tabbar:{ 
-        flexDirection: 'row',
-        width:'100%',
-        height: Platform.OS =='ios' ? verticalScale(73) : verticalScale(55),
-        backgroundColor:colors.neutral100,
-        justifyContent:"space-around",
-        alignItems:"center",
-        borderTopColor:colors.white,
-        borderTopWidth:1,
-    },
-    tabbarItem:{
-        marginBottom:Platform.OS=='ios'?spacingY._10:spacingY._5,
-        justifyContent:"center",
-        alignItems:"center",
-    },
- })
+const styles = StyleSheet.create({
+  tabbar: {
+    flexDirection: "row",
+    width: "100%",
+    height: Platform.OS == "ios" ? verticalScale(73) : verticalScale(55),
+    backgroundColor: colors.neutral100,
+    justifyContent: "space-around",
+    alignItems: "center",
+    borderTopColor: colors.white,
+    borderTopWidth: 2,
+  },
+  tabbarItem: {
+    marginBottom: Platform.OS == "ios" ? spacingY._10 : spacingY._5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
