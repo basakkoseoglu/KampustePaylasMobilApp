@@ -109,7 +109,7 @@ const AboutScreen = () => {
             </TouchableOpacity>
 
             <View style={styles.emailRow}>
-              <Icons.Envelope size={18} color="#6B7280" weight="regular" />
+              {/* <Icons.Envelope size={18} color="#6B7280" weight="regular" /> */}
               <Text style={styles.emailText}>{SUPPORT_EMAIL}</Text>
             </View>
           </ScrollView>
