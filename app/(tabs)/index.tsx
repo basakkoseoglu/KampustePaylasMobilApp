@@ -16,7 +16,7 @@ const Home = () => {
     <ScreenWrapper style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require("../../assets/images/logo2.png")}
+          source={require("../../assets/images/logo3.png")}
           style={styles.logoImage}
           resizeMode="contain"
         />
@@ -89,11 +89,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 30,
   },
   logoImage: {
-    width: 120,
-    height: 120,
+    width: 160,
+    height: 160,
   },
   slogan: {
     fontSize: 23,

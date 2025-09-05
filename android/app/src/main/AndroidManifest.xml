@@ -27,6 +27,7 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
         <data android:scheme="com.anonymous.kampusteyasamapp"/>
+        <data android:scheme="exp+kampusteyasamapp"/>
       </intent-filter>
     </activity>
   </application>

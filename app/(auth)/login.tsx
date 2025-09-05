@@ -39,7 +39,7 @@ const Login = () => {
           <Image
             style={styles.logo}
             resizeMode="contain"
-            source={require("../../assets/images/logo2.png")}
+            source={require("../../assets/images/logo3.png")}
           />
         </View>
         {/* form */}
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     marginBottom: spacingY._30,
   },
   logo: {
-    height: 250,
+    height: 200,
     aspectRatio: 1,
   },
   form: {
