@@ -39,7 +39,7 @@ const Home = () => {
             style={[styles.card, styles.blueButton]}
             onPress={() => router.push("/(modals)/lendOrSellModal")}
           >
-            <FontAwesome5 name="suitcase" size={34} color="#1565c0" />
+            <FontAwesome5 name="suitcase" size={34} color="#424242" />
             <Text style={styles.cardTitle}>Ödünç Eşya Verme & Satma</Text>
             <Text style={styles.cardText}>
               {" "}
@@ -49,6 +49,14 @@ const Home = () => {
         </View>
 
         <View style={styles.row}>
+          <TouchableOpacity
+            style={[styles.card, styles.grayButton]}
+            onPress={() => router.push("/(modals)/campusEventModal")}
+          >
+            <MaterialIcons name="campaign" size={42} color="#424242" />
+            <Text style={styles.cardTitle}>Etkinlik & Duyuru</Text>
+            <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={[styles.card, styles.orangeButton]}
             onPress={() => router.push("/(modals)/volunteerHelpModal")}
@@ -62,15 +70,6 @@ const Home = () => {
             <Text style={styles.cardText}>
               (Ders desteği, kampüs işleri vb.) ilanı vermek için tıklayınız.
             </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.card, styles.grayButton]}
-            onPress={() => router.push("/(modals)/campusEventModal")}
-          >
-            <MaterialIcons name="campaign" size={42} color="#424242" />
-            <Text style={styles.cardTitle}>Etkinlik & Duyuru</Text>
-            <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 23,
     fontWeight: "bold",
     color: "#188040",
-    marginBottom: 40,
+    marginBottom: 50,
     textAlign: "center",
   },
   buttonsContainer: {
@@ -139,8 +138,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
   blueButton: {
-    backgroundColor: "#BBDEFB",
-    borderColor: "#90CAF9",
+    backgroundColor: "white",
+    borderColor: "#BDBDBD",
     borderWidth: 2,
   },
   orangeButton: {
