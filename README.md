@@ -1,7 +1,7 @@
-<h1 align="center">📱 Kampüste Yaşam</h1>
+<h1 align="center">📱 Kampüste Paylaş</h1>
 
 <p align="center">
-  <b>Kampüste Yaşam</b>, üniversite öğrencileri için özel olarak geliştirilmiş bir mobil uygulamadır.<br>
+  <b>Kampüste Paylaş</b>, üniversite öğrencileri için özel olarak geliştirilmiş bir mobil uygulamadır.<br>
   Amacı, öğrencilerin kampüs hayatını daha <b>sosyal</b>, <b>verimli</b> ve <b>keyifli</b> hale getirmektir.
 </p>
 
@@ -16,7 +16,7 @@ Bu uygulama sayesinde öğrenciler:
 - 💬 <b>Gerçek zamanlı mesajlaşma</b> ile iletişim kurabilir  
 
 <p>
-Kısacası <b>Kampüste Yaşam</b>, kampüs hayatını dijital bir topluluk ortamına taşıyan modern bir platformdur.
+Kısacası <b>Kampüste Paylaş</b>, kampüs hayatını dijital bir topluluk ortamına taşıyan modern bir platformdur.
 </p>
 
 ---
