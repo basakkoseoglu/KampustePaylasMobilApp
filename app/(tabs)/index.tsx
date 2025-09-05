@@ -7,6 +7,7 @@ import {
   MaterialIcons,
   FontAwesome5,
   MaterialCommunityIcons,
+  Entypo,
 } from "@expo/vector-icons";
 
 const Home = () => {
@@ -30,7 +31,7 @@ const Home = () => {
             style={[styles.card, styles.greenButton]}
             onPress={() => router.push("/(modals)/courseAdvertModal")}
           >
-            <Ionicons name="book-outline" size={38} color="#188040" />
+            <Entypo name="open-book" size={38} color="#188040" />
             <Text style={styles.cardTitle}>Ders Notu & Kitap</Text>
             <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
