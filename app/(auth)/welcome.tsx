@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: "100%",
-    paddingHorizontal: spacingX._25,
+    paddingHorizontal: spacingX._20,
   },
   loginButton: {
     alignSelf: "flex-end",
@@ -115,5 +115,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 12,
     elevation: 5,
+    marginTop: 30,
   },
 });

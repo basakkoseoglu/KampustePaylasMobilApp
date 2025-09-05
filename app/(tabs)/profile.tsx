@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: spacingX._20,
+    paddingTop: 35,
   },
   userInfo: {
     marginTop: verticalScale(30),
