@@ -88,12 +88,11 @@ const PostDetail = () => {
 export default PostDetail;
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, paddingTop: 25 },
   scroll: { padding: 16 },
   header: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 12,
   },
   card: {
     padding: 16,

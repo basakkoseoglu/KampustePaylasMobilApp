@@ -30,7 +30,7 @@ const AboutScreen = () => {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <BackButton style={{ marginBottom: 8 }} />
+        <BackButton style={{ marginBottom: 8, marginTop: 25 }} />
         <Text style={styles.pageTitle}>Hakkımızda</Text>
 
         <View style={styles.card}>
@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#0F172A",
     marginBottom: 12,
+
     textAlign: "center",
   },
   card: {

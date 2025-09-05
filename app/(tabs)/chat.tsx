@@ -409,7 +409,6 @@ const styles = StyleSheet.create({
   lastMessage: {
     fontSize: 14,
     color: "#666",
-    marginTop: 4,
   },
   trashButton: {
     position: "absolute",

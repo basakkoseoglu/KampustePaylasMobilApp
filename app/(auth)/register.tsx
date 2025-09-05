@@ -341,6 +341,7 @@ const styles = StyleSheet.create({
   logo: {
     height: 200,
     aspectRatio: 1,
+    marginTop: 20,
   },
   form: {
     gap: spacingY._12,

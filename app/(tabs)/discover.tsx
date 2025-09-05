@@ -408,7 +408,7 @@ const Discover = () => {
 export default Discover;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f5f5" },
+  container: { flex: 1, backgroundColor: "#f5f5f5", paddingTop: 35 },
   universityPickerContainer: { padding: 16 },
   selectContainer: {
     flexDirection: "row",

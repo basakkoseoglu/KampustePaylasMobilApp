@@ -1,9 +1,15 @@
 // Düzenlenmiş LoanDetailView.tsx
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Image } from 'expo-image';
-import * as Icons from 'phosphor-react-native';
-import { colors } from '@/constants/theme';
+import React from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { Image } from "expo-image";
+import * as Icons from "phosphor-react-native";
+import { colors } from "@/constants/theme";
 
 interface LoanDetailViewProps {
   data: any;
@@ -15,7 +21,7 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
       {/* Kişi Bilgileri */}
       <View style={styles.card}>
         <View style={styles.sectionHeader}>
-          <Icons.User size={18} color='#7AA9CFFF' weight="bold" />
+          <Icons.User size={18} color="#7AA9CFFF" weight="bold" />
           <Text style={styles.sectionTitle}>Kişi Bilgileri</Text>
         </View>
         <InfoRow label="İsim" value={data.ownerName} />
@@ -25,7 +31,7 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
       {/* Etkinlik Bilgileri */}
       <View style={styles.card}>
         <View style={styles.sectionHeader}>
-          <Icons.Swap size={18} color='#7AA9CFFF'weight="bold" />
+          <Icons.Swap size={18} color="#7AA9CFFF" weight="bold" />
           <Text style={styles.sectionTitle}>İlan Bilgileri</Text>
         </View>
         <InfoRow label="Başlık" value={data.itemTitle} />
@@ -51,7 +57,7 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
 const InfoRow = ({ label, value }: { label: string; value: string }) => (
   <View style={styles.rowBetween}>
     <Text style={styles.label}>{label}</Text>
-    <Text style={styles.value}>{value || '—'}</Text>
+    <Text style={styles.value}>{value || "—"}</Text>
   </View>
 );
 
@@ -67,52 +73,52 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
     gap: 6,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: colors.black,
   },
   rowBetween: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 10,
   },
   label: {
-    fontWeight: '500',
+    fontWeight: "500",
     color: colors.neutral400,
     flex: 1,
   },
   value: {
     color: colors.black,
-    fontWeight: '500',
-    textAlign: 'right',
+    fontWeight: "500",
+    textAlign: "right",
     flex: 1,
   },
   footer: {
     paddingBottom: 32,
-    alignItems: 'center',
+    alignItems: "center",
   },
   button: {
-    backgroundColor:'#FF9800',
+    backgroundColor: "#FF9800",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 8,
   },
   buttonText: {
-    color: 'white',
-    fontWeight: '600',
+    color: "white",
+    fontWeight: "600",
     fontSize: 16,
   },
 });
