@@ -20,6 +20,7 @@ import {
   onSnapshot,
   doc,
   updateDoc,
+  getDoc,
 } from "firebase/firestore";
 import { useAuth } from "@/contexts/authContext";
 import { Image } from "expo-image";
@@ -79,77 +80,46 @@ const ChatScreen: React.FC = () => {
         try {
           console.log(`Found ${snapshot.docs.length} chats`);
 
+          // useEffect içinde chat listesi yüklenirken
           const updatedChats: ChatPreview[] = await Promise.all(
             snapshot.docs.map(async (docSnap) => {
               const chatData = docSnap.data();
               const docRef = doc(firestore, "chats", docSnap.id);
 
-              console.log(`Processing chat ${docSnap.id}:`, chatData);
-
               let otherUserName = "Bilinmeyen";
               let otherUserImage = null;
               let otherUserId = null;
 
-              // Method 1: Check participantsInfo array (new format)
+              // 1. Katılımcı ID'sini bul
               if (
-                Array.isArray(chatData.participantsInfo) &&
-                chatData.participantsInfo.length > 0
-              ) {
-                const myInfo = chatData.participantsInfo.find(
-                  (p: any) => p.id === currentUserId
-                );
-                const otherInfo = chatData.participantsInfo.find(
-                  (p: any) => p.id !== currentUserId
-                );
-
-                if (otherInfo) {
-                  otherUserName = otherInfo.name || "Bilinmeyen";
-                  otherUserImage = otherInfo.image || null;
-                  otherUserId = otherInfo.id;
-                }
-
-                // Update current user's image if it has changed
-                if (myInfo && user?.image && myInfo.image !== user.image) {
-                  console.log("Updating user image in chat");
-                  const newParticipantsInfo = chatData.participantsInfo.map(
-                    (p: any) =>
-                      p.id === currentUserId ? { ...p, image: user.image } : p
-                  );
-
-                  await updateDoc(docRef, {
-                    participantsInfo: newParticipantsInfo,
-                  });
-                }
-              }
-              // Method 2: Check participantNames object (fallback format)
-              else if (
-                chatData.participantNames &&
-                typeof chatData.participantNames === "object"
-              ) {
-                const otherUserIdFromParticipants = chatData.participants?.find(
-                  (id: string) => id !== currentUserId
-                );
-                if (otherUserIdFromParticipants) {
-                  otherUserId = otherUserIdFromParticipants;
-                  otherUserName =
-                    chatData.participantNames[otherUserIdFromParticipants] ||
-                    "Bilinmeyen";
-                }
-              }
-              // Method 3: Fallback - extract from participants array
-              else if (
                 Array.isArray(chatData.participants) &&
                 chatData.participants.length >= 2
               ) {
                 otherUserId = chatData.participants.find(
                   (id: string) => id !== currentUserId
                 );
-                // If we have otherUserId but no name, we'll keep "Bilinmeyen" but at least we have the ID
               }
 
-              console.log(
-                `Chat ${docSnap.id} - Other user: ${otherUserName} (ID: ${otherUserId})`
-              );
+              // 2. İsmi al
+              if (chatData.participantNames && otherUserId) {
+                otherUserName =
+                  chatData.participantNames[otherUserId] || "Bilinmeyen";
+              }
+
+              // 3. Kullanıcı resmi Firestore'dan al
+              if (otherUserId) {
+                try {
+                  const userDoc = await getDoc(
+                    doc(firestore, "users", otherUserId)
+                  );
+                  if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    otherUserImage = userData.image || null;
+                  }
+                } catch (err) {
+                  console.error("Kullanıcı resmi alınamadı:", err);
+                }
+              }
 
               return {
                 chatId: docSnap.id,

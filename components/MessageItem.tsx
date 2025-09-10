@@ -11,7 +11,10 @@ interface MessageItemProps {
   };
   showAvatar?: boolean;
   currentUserId: string;
+  senderImage?: string; // ekledik
   receiverImage?: string;
+  receiverName?: string; // ekledik
+  getInitials?: (name: string) => string; // ekledik
 }
 
 const MessageItem: React.FC<MessageItemProps> = ({

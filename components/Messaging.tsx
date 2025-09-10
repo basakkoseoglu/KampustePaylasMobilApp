@@ -41,13 +41,15 @@ const Messaging: React.FC<MessagingProps> = ({
   const [newMessage, setNewMessage] = useState("");
   const [isTypingText, setIsTypingText] = useState("");
   const [chatExists, setChatExists] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState(true); // loading state
+  const [loading, setLoading] = useState(true);
+  const [participantImages, setParticipantImages] = useState<{
+    [key: string]: string;
+  }>({});
   const flatListRef = useRef<FlatList>(null);
 
   const formatDateLabel = (timestamp: number) => {
     const now = new Date();
     const date = new Date(timestamp);
-
     const todayStart = new Date(now.setHours(0, 0, 0, 0));
     const msgStart = new Date(date.setHours(0, 0, 0, 0));
     const diffDays = Math.floor(
@@ -60,6 +62,72 @@ const Messaging: React.FC<MessagingProps> = ({
       return msgStart.toLocaleDateString("tr-TR", { weekday: "long" });
     return msgStart.toLocaleDateString("tr-TR");
   };
+
+  // Function to get initials from name
+  const getInitials = (name: string) => {
+    const parts = name.trim().split(" ");
+    return parts.length >= 2
+      ? `${parts[0][0]}${parts[parts.length - 1][0]}`
+      : name.slice(0, 2).toUpperCase();
+  };
+
+  // Kullanıcı profil resmini Firebase'den çek
+  const fetchUserProfileImage = async (userId: string) => {
+    try {
+      const userDocRef = doc(firestore, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const profileImage =
+          userData.profileImage ||
+          userData.imageUrl ||
+          userData.image ||
+          userData.photoURL ||
+          "";
+        return profileImage;
+      }
+    } catch (error) {
+      console.error("Kullanıcı profil resmi çekilemedi:", error);
+    }
+    return "";
+  };
+
+  // Chat participants'ların profil resimlerini çek
+  useEffect(() => {
+    const loadParticipantImages = async () => {
+      try {
+        const chatDocRef = doc(firestore, "chats", chatId);
+        const chatDoc = await getDoc(chatDocRef);
+
+        if (chatDoc.exists()) {
+          const chatData = chatDoc.data();
+          const participants = chatData.participants || [];
+          const imagePromises = participants.map(
+            async (participantId: string) => {
+              const profileImage = await fetchUserProfileImage(participantId);
+              return { [participantId]: profileImage };
+            }
+          );
+
+          const imageResults = await Promise.all(imagePromises);
+          const imagesMap = imageResults.reduce(
+            (acc, curr) => ({ ...acc, ...curr }),
+            {}
+          );
+          setParticipantImages(imagesMap);
+
+          console.log("Participant Images:", imagesMap);
+        }
+      } catch (error) {
+        console.error("Participant resimleri yüklenirken hata:", error);
+      }
+    };
+
+    if (chatId) {
+      loadParticipantImages();
+    }
+  }, [chatId]);
 
   useEffect(() => {
     if (!chatId) return;
@@ -86,7 +154,7 @@ const Messaging: React.FC<MessagingProps> = ({
         ...doc.data(),
       }));
       setMessages(fetched);
-      setLoading(false); // mesajlar yüklendiğinde
+      setLoading(false);
     });
 
     const chatDocRef = doc(firestore, "chats", chatId);
@@ -127,7 +195,6 @@ const Messaging: React.FC<MessagingProps> = ({
       typingUser: "",
       typingUsername: "",
     });
-
     setChatExists(true);
   };
 
@@ -202,7 +269,6 @@ const Messaging: React.FC<MessagingProps> = ({
     }
 
     const grouped: { [key: string]: any[] } = {};
-
     messages.forEach((msg) => {
       const label = formatDateLabel(msg.timestamp);
       if (!grouped[label]) grouped[label] = [];
@@ -215,13 +281,20 @@ const Messaging: React.FC<MessagingProps> = ({
         {group.map((msg, index) => {
           const prevMsg = group[index - 1];
           const showAvatar = !prevMsg || prevMsg.senderId !== msg.senderId;
+
+          // Mesajı gönderen kişinin profil resmini al
+          const senderImage = participantImages[msg.senderId] || "";
+
           return (
             <MessageItem
               key={msg.id}
               item={msg}
               currentUserId={currentUserId}
               showAvatar={showAvatar}
+              senderImage={senderImage} // Gönderenin profil resmi
               receiverImage={receiverImage}
+              receiverName={receiverName}
+              getInitials={getInitials}
             />
           );
         })}
@@ -239,7 +312,7 @@ const Messaging: React.FC<MessagingProps> = ({
       ) : (
         <FlatList
           ref={flatListRef}
-          data={[]} // empty, since we're rendering manually
+          data={[]}
           ListHeaderComponent={<>{renderMessagesWithDate()}</>}
           renderItem={null}
           contentContainerStyle={styles.messagesList}

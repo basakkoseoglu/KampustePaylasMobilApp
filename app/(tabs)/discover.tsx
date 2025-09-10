@@ -12,7 +12,12 @@ import ScreenWrapper from "@/components/ScreenWrapper";
 import { colors } from "@/constants/theme";
 import * as Icons from "phosphor-react-native";
 import provinceUniversities from "@/json/province-universities.json";
-import { collection, getDocs, getFirestore, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  onSnapshot,
+} from "firebase/firestore";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { query, where } from "firebase/firestore";
@@ -106,49 +111,56 @@ const Discover = () => {
     const collections = ["loanAds", "notesAds", "volunteerAds", "eventAds"];
     const newUnsubscribers: (() => void)[] = [];
 
-    unsubscribers.forEach(unsubscribe => unsubscribe());
+    unsubscribers.forEach((unsubscribe) => unsubscribe());
 
     collections.forEach((collectionName) => {
       const ref = collection(db, collectionName);
-      const q = selectedUniversity && selectedUniversity !== "Tümü"
-        ? query(ref, where("ownerUniversity", "==", selectedUniversity))
-        : ref;
+      const q =
+        selectedUniversity && selectedUniversity !== "Tümü"
+          ? query(ref, where("ownerUniversity", "==", selectedUniversity))
+          : ref;
 
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const collectionPosts: Post[] = [];
-        
-        snapshot.forEach((doc) => {
-          const d = doc.data() as any;
-          collectionPosts.push({
-            id: doc.id,
-            ownerId: d.ownerUid,
-            ownerName: d.ownerName,
-            ownerUniversity: d.ownerUniversity,
-            ownerImage: d.ownerImage || "",
-            title:
-              d.itemTitle ||
-              d.courseTitle ||
-              d.adTitle ||
-              d.ilanBasligi ||
-              "İlan",
-            type: collectionName,
-            createdAt:
-              typeof d.createdAt === "number"
-                ? d.createdAt
-                : typeof d.createdAt?.toDate === "function"
-                ? d.createdAt.toDate().getTime()
-                : Date.now(),
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          const collectionPosts: Post[] = [];
+
+          snapshot.forEach((doc) => {
+            const d = doc.data() as any;
+            collectionPosts.push({
+              id: doc.id,
+              ownerId: d.ownerUid,
+              ownerName: d.ownerName,
+              ownerUniversity: d.ownerUniversity,
+              ownerImage: d.ownerImage || "",
+              title:
+                d.itemTitle ||
+                d.courseTitle ||
+                d.adTitle ||
+                d.ilanBasligi ||
+                "İlan",
+              type: collectionName,
+              createdAt:
+                typeof d.createdAt === "number"
+                  ? d.createdAt
+                  : typeof d.createdAt?.toDate === "function"
+                  ? d.createdAt.toDate().getTime()
+                  : Date.now(),
+            });
           });
-        });
 
-        setPosts(prevPosts => {
-          const otherPosts = prevPosts.filter(post => post.type !== collectionName);
-          const allPosts = [...otherPosts, ...collectionPosts];
-          return allPosts.sort((a, b) => b.createdAt - a.createdAt);
-        });
-      }, (error) => {
-        console.error(`${collectionName} dinleme hatası:`, error);
-      });
+          setPosts((prevPosts) => {
+            const otherPosts = prevPosts.filter(
+              (post) => post.type !== collectionName
+            );
+            const allPosts = [...otherPosts, ...collectionPosts];
+            return allPosts.sort((a, b) => b.createdAt - a.createdAt);
+          });
+        },
+        (error) => {
+          console.error(`${collectionName} dinleme hatası:`, error);
+        }
+      );
 
       newUnsubscribers.push(unsubscribe);
     });
@@ -166,7 +178,7 @@ const Discover = () => {
     fetchData();
 
     return () => {
-      unsubscribers.forEach(unsubscribe => unsubscribe());
+      unsubscribers.forEach((unsubscribe) => unsubscribe());
     };
   }, [setupRealtimeListeners]);
 
@@ -362,28 +374,32 @@ const Discover = () => {
         <Icons.MagnifyingGlass size={80} color={colors.neutral300} />
       </View>
       <Text style={styles.emptyTitle}>
-        {selectedType ? "Bu kategoride henüz ilan yok" : "Henüz ilan bulunmuyor"}
+        {selectedType
+          ? "Bu kategoride henüz ilan yok"
+          : "Henüz ilan bulunmuyor"}
       </Text>
       <Text style={styles.emptySubtitle}>
-        {selectedUniversity && selectedUniversity !== "Tümü" 
-          ? `${selectedUniversity} için ${selectedType ? 'bu kategoride' : ''} henüz ilan paylaşılmamış.`
-          : `${selectedType ? 'Bu kategoride' : ''} İlk ilanı sen paylaş!`
-        }
+        {selectedUniversity && selectedUniversity !== "Tümü"
+          ? `${selectedUniversity} için ${
+              selectedType ? "bu kategoride" : ""
+            } henüz ilan paylaşılmamış.`
+          : `${selectedType ? "Bu kategoride" : ""} İlk ilanı sen paylaş!`}
       </Text>
-      
-      <TouchableOpacity 
+
+      <TouchableOpacity
         style={styles.emptyButton}
-        onPress={() => router.push('/(tabs)')} 
+        onPress={() => router.push("/(tabs)")}
       >
         <Icons.Plus size={20} color="white" style={{ marginRight: 8 }} />
         <Text style={styles.emptyButtonText}>İlan Oluştur</Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity 
-        style={styles.refreshButton}
-        onPress={refreshData}
-      >
-        <Icons.ArrowClockwise size={18} color={colors.neutral400} style={{ marginRight: 6 }} />
+
+      <TouchableOpacity style={styles.refreshButton} onPress={refreshData}>
+        <Icons.ArrowClockwise
+          size={18}
+          color={colors.neutral400}
+          style={{ marginRight: 6 }}
+        />
         <Text style={styles.refreshButtonText}>Yenile</Text>
       </TouchableOpacity>
     </View>
@@ -479,7 +495,7 @@ const Discover = () => {
               ? POST_TYPES.find((t) => t.value === selectedType)?.label
               : "İlan türü seçin"}
           </Text>
-          <Icons.Funnel  size={18} color={colors.black} />
+          <Icons.Funnel size={18} color={colors.black} />
         </TouchableOpacity>
         {showTypeModal && (
           <View style={styles.typeModal}>
@@ -510,9 +526,7 @@ const Discover = () => {
 
       {/* İlan Listesi */}
       {filteredPosts.length === 0 ? (
-        <View style={styles.emptyStateContainer}>
-          {renderEmptyState()}
-        </View>
+        <View style={styles.emptyStateContainer}>{renderEmptyState()}</View>
       ) : (
         <FlatList
           data={filteredPosts}
@@ -605,12 +619,12 @@ const styles = StyleSheet.create({
   postsList: { padding: 16 },
   emptyStateContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   emptyContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 40,
   },
   emptyIconContainer: {
@@ -618,53 +632,53 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 70,
     backgroundColor: colors.neutral100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 24,
   },
   emptyTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     color: colors.neutral100,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 12,
   },
   emptySubtitle: {
     fontSize: 16,
     color: colors.neutral400,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 22,
     marginBottom: 32,
   },
   emptyButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ff9800',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#ff9800",
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
     marginBottom: 16,
-    shadowColor: '#ff9800',
+    shadowColor: "#ff9800",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 6,
   },
   emptyButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   refreshButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 16,
   },
   refreshButtonText: {
     color: colors.neutral400,
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
   },
   postCard: {
     backgroundColor: "white",

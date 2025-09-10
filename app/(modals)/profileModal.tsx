@@ -2,6 +2,7 @@ import {
   Alert,
   ScrollView,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -172,7 +173,7 @@ const ProfileModal = () => {
                 onChangeText={(value) =>
                   setUserData({ ...userData, name: value })
                 }
-                style={{ paddingTop: verticalScale(2) }}
+                style={{ paddingTop: verticalScale(2), fontSize: 16 }}
               />
             </View>
             <View style={styles.inputContainer}>
@@ -186,13 +187,20 @@ const ProfileModal = () => {
             </View>
             <View style={styles.inputContainer}>
               <Typo color={colors.black}>Bölüm </Typo>
-              <TextInputField
-                placeholder={userData.department ? "" : "Bölüm"}
+              <TextInput
+                placeholder="Bölüm"
                 value={userData.department}
                 onChangeText={(value) =>
                   setUserData({ ...userData, department: value })
                 }
-                style={{ paddingTop: verticalScale(2) }}
+                style={{
+                  borderWidth: 1,
+                  borderColor: colors.neutral300,
+                  paddingHorizontal: spacingX._15,
+                  borderRadius: 12,
+                  height: verticalScale(60),
+                  fontSize: 16,
+                }}
               />
             </View>
             <View style={styles.inputContainer}>

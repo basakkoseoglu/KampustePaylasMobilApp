@@ -1,4 +1,5 @@
-import React from "react";
+// MessagingScreen.tsx
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import Messaging from "@/components/Messaging";
@@ -7,6 +8,8 @@ import { Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { ArrowLeft } from "phosphor-react-native";
 import { Image } from "expo-image";
+import { firestore } from "@/config/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const MessagingScreen = () => {
   const { chatId, receiverName, receiverImage, receiverId } =
@@ -16,9 +19,11 @@ const MessagingScreen = () => {
       receiverImage?: string;
       receiverId?: string;
     }>();
-
   const { user } = useAuth();
   const router = useRouter();
+
+  const [receiverProfileImage, setReceiverProfileImage] = useState<string>("");
+  const [loading, setLoading] = useState(true);
 
   if (!chatId || !receiverName || !user?.uid || !user?.name) {
     return null;
@@ -28,9 +33,60 @@ const MessagingScreen = () => {
   const getInitials = (name: string) => {
     const parts = name.trim().split(" ");
     return parts.length >= 2
-      ? `${parts[0][0]}.${parts[parts.length - 1][0]}`
-      : name.slice(0, 2);
+      ? `${parts[0][0]}${parts[parts.length - 1][0]}`
+      : name.slice(0, 2).toUpperCase();
   };
+
+  // Kullanıcı profil resmini Firebase'den çek
+  const fetchUserProfileImage = async (userId: string) => {
+    try {
+      const userDocRef = doc(firestore, "users", userId);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        // Farklı alan isimlerini kontrol et
+        const profileImage =
+          userData.profileImage ||
+          userData.imageUrl ||
+          userData.image ||
+          userData.photoURL ||
+          "";
+        return profileImage;
+      }
+    } catch (error) {
+      console.error("Kullanıcı profil resmi çekilemedi:", error);
+    }
+    return "";
+  };
+
+  // receiverId varsa profil resmini çek
+  useEffect(() => {
+    const loadReceiverProfileImage = async () => {
+      if (receiverId && receiverId !== "undefined") {
+        const profileImage = await fetchUserProfileImage(receiverId);
+        setReceiverProfileImage(profileImage);
+      }
+      setLoading(false);
+    };
+
+    loadReceiverProfileImage();
+  }, [receiverId]);
+
+  // Önce receiverImage prop'unu kontrol et, yoksa çekilen resmi kullan
+  const finalReceiverImage =
+    receiverImage &&
+    receiverImage.trim() !== "" &&
+    receiverImage !== "undefined"
+      ? receiverImage
+      : receiverProfileImage;
+
+  console.log("MessagingScreen Debug:", {
+    receiverId,
+    receiverImage,
+    receiverProfileImage,
+    finalReceiverImage,
+  });
 
   return (
     <View style={styles.container}>
@@ -41,13 +97,18 @@ const MessagingScreen = () => {
 
         {/* Receiver Avatar */}
         <View style={styles.receiverAvatar}>
-          {receiverImage && receiverImage.trim() !== "" ? (
-            <Image source={{ uri: receiverImage }} style={styles.avatarImage} />
+          {finalReceiverImage ? (
+            <Image
+              source={{ uri: finalReceiverImage }}
+              style={styles.avatarImage}
+              onError={() =>
+                console.log("Header avatar yüklenemedi:", finalReceiverImage)
+              }
+            />
           ) : (
             <Text style={styles.avatarText}>{getInitials(receiverName)}</Text>
           )}
         </View>
-
         <Text style={styles.headerText}>{receiverName}</Text>
       </View>
 
@@ -56,7 +117,7 @@ const MessagingScreen = () => {
         currentUserId={user.uid}
         username={user.name}
         receiverName={receiverName}
-        receiverImage={receiverImage}
+        receiverImage={finalReceiverImage}
         receiverId={receiverId}
       />
     </View>
@@ -69,7 +130,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    paddingTop: 12,
+    paddingTop: 16,
   },
   header: {
     height: 60,
@@ -102,6 +163,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "black",
-    flex: 1, // This will make the name take remaining space
+    flex: 1,
   },
 });
