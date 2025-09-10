@@ -15,25 +15,56 @@ import { auth } from "../config/firebase";
 const PasswordReset = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handlePasswordReset = () => {
+  const handlePasswordReset = async () => {
     if (!email) {
       Alert.alert("Uyarı", "Lütfen önce e-posta adresinizi girin.");
       return;
     }
 
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        Alert.alert(
-          "Başarılı",
-          "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi."
-        );
-        setModalVisible(false);
-        setEmail("");
-      })
-      .catch((error) => {
-        Alert.alert("Hata", error.message || "Bir hata oluştu.");
-      });
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert("Uyarı", "Lütfen geçerli bir e-posta adresi girin.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      console.log("Auth nesnesi:", auth);
+      console.log("Email gönderiliyor:", email);
+      
+      await sendPasswordResetEmail(auth, email);
+      
+      Alert.alert(
+        "Başarılı",
+        "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi."
+      );
+      setModalVisible(false);
+      setEmail("");
+      
+    } catch (error: any) {
+      console.error("Password reset hatası:", error);
+      
+      let errorMessage = "Bir hata oluştu.";
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = "Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı.";
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = "Geçersiz e-posta adresi.";
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = "Ağ bağlantı hatası. İnternet bağlantınızı kontrol edin.";
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = "Çok fazla deneme yapıldı. Lütfen daha sonra tekrar deneyin.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      Alert.alert("Hata", errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,13 +98,15 @@ const PasswordReset = () => {
               autoCorrect={false}
               style={styles.textInput}
               placeholderTextColor="#CCC"
+              editable={!loading}
             />
             <View style={styles.buttonRow}>
               <View style={styles.buttonContainer}>
                 <Button
-                  title="Gönder"
+                  title={loading ? "Gönderiliyor..." : "Gönder"}
                   onPress={handlePasswordReset}
                   color="grey"
+                  disabled={loading}
                 />
               </View>
               <View style={styles.buttonContainer}>
@@ -81,6 +114,7 @@ const PasswordReset = () => {
                   title="İptal"
                   onPress={() => setModalVisible(false)}
                   color="#ccc"
+                  disabled={loading}
                 />
               </View>
             </View>

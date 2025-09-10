@@ -94,7 +94,7 @@ const Login = () => {
             Henüz bir hesabın yok mu?
           </Typo>
           <Pressable onPress={() => router.navigate("/(auth)/register")}>
-            <Typo size={15} fontWeight={"700"} color={colors.neutral150}>
+            <Typo size={15} fontWeight={"700"} color="#AAA">
               Kayıt Ol
             </Typo>
           </Pressable>

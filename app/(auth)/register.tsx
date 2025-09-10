@@ -315,7 +315,7 @@ const Register: React.FC = () => {
             Hesabın var mı?
           </Typo>
           <Pressable onPress={() => router.navigate("/(auth)/login")}>
-            <Typo size={15} fontWeight="700" color={colors.neutral150}>
+            <Typo size={15} fontWeight="700" color="#AAA">
               Giriş Yap
             </Typo>
           </Pressable>

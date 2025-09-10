@@ -71,7 +71,11 @@ const TextInputField = ({
         onBlur={() => setIsFocused(false)}
         {...rest}
       />
-      {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
+      {rightIcon && (
+      <View style={styles.rightIcon} pointerEvents="box-none">
+        {rightIcon}
+      </View>
+    )}
     </View>
   );
 };
