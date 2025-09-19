@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#188040",
     alignSelf: "flex-end",
     borderTopRightRadius: 0,
+    marginRight: 16,
   },
   theirMessage: {
     backgroundColor: "#F1F1F1",

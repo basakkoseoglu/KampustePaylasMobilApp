@@ -193,12 +193,12 @@ const VolunteerHelpModal = () => {
           {/* Ana Başlık */}
           <View style={styles.titleRow}>
             <BackButton
-              iconSize={20}
+              iconSize={24}
               style={{
-                backgroundColor: "#FFCC80",
-                padding: 4,
-                marginRight: 16,
+                backgroundColor: "#f5f5f5",
+                marginRight: 8,
               }}
+              iconColor="#666"
             />
             <Text style={styles.mainTitle}>Gönüllü Yardımlaşma İlanı</Text>
           </View>
@@ -425,7 +425,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#FFCC80",
-    marginTop: 5,
     textAlign: "center",
     marginBottom: 8,
   },
@@ -598,7 +597,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   titleRow: {
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 16,

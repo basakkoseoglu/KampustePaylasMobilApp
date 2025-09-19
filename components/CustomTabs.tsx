@@ -20,7 +20,7 @@ export default function CustomTabs({
         <Icons.CalendarBlank
           size={verticalScale(28)}
           weight={isFocused ? "fill" : "regular"}
-          color={colors.primaryLight}
+          color="black"
         />
       </View>
     ),
@@ -29,7 +29,7 @@ export default function CustomTabs({
         <Icons.Megaphone
           size={verticalScale(28)}
           weight={isFocused ? "fill" : "regular"}
-          color={colors.primaryLight}
+          color="black"
         />
       </View>
     ),
@@ -38,7 +38,7 @@ export default function CustomTabs({
         <Icons.ChatCircleDots
           size={verticalScale(30)}
           weight={isFocused ? "fill" : "regular"}
-          color={colors.primaryLight}
+          color="black"
         />
       </View>
     ),
@@ -47,7 +47,7 @@ export default function CustomTabs({
         <Icons.UserCircle
           size={verticalScale(32)}
           weight={isFocused ? "fill" : "regular"}
-          color={colors.primaryLight}
+          color="black"
         />
       </View>
     ),

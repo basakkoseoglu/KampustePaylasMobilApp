@@ -54,11 +54,10 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
   );
 };
 
-
 const InfoRow = ({ label, value }: { label: string; value: string }) => (
   <View style={styles.rowColumn}>
     <Text style={styles.label}>{label}</Text>
-    <Text style={styles.value}>{value || '—'}</Text>
+    <Text style={styles.value}>{value || "—"}</Text>
   </View>
 );
 
@@ -66,7 +65,7 @@ export default LoanDetailView;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    padding: 12,
     backgroundColor: colors.neutral100,
   },
   card: {
@@ -91,17 +90,17 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.black,
   },
-rowColumn: {
+  rowColumn: {
     marginBottom: 10,
   },
   label: {
-    fontWeight: '500',
+    fontWeight: "500",
     color: colors.neutral400,
-    marginBottom: 4, 
+    marginBottom: 4,
   },
   value: {
     color: colors.black,
-    fontWeight: '500',
+    fontWeight: "500",
     lineHeight: 20,
   },
   footer: {
@@ -111,7 +110,7 @@ rowColumn: {
   button: {
     backgroundColor: "#FF9800",
     paddingVertical: 12,
-    paddingHorizontal: 32,
+    paddingHorizontal: 25,
     borderRadius: 8,
   },
   buttonText: {
@@ -121,7 +120,7 @@ rowColumn: {
   },
   descriptionValue: {
     color: colors.black,
-    fontWeight: '500',
+    fontWeight: "500",
     marginTop: 4,
     lineHeight: 20,
   },

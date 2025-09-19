@@ -146,7 +146,17 @@ const ProfileModal = () => {
         <View style={styles.container}>
           <Header
             title="Profili Güncelle"
-            leftIcon={<BackButton />}
+            leftIcon={
+              <BackButton
+                iconSize={24}
+                iconColor="#666"
+                style={{
+                  backgroundColor: "transparent",
+                  elevation: 0,
+                  padding: 0,
+                }}
+              />
+            }
             style={{ marginBottom: spacingY._10 }}
           />
           <ScrollView contentContainerStyle={styles.form}>

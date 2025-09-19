@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from "react-native";
 import React from "react";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { useRouter } from "expo-router";
@@ -9,8 +16,9 @@ import {
   MaterialCommunityIcons,
   Entypo,
 } from "@expo/vector-icons";
+import { colors } from "@/constants/theme";
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 
 // Responsive helper functions
 const wp = (percentage: number): number => {
@@ -56,7 +64,11 @@ const Home = () => {
             style={[styles.card, styles.blueButton]}
             onPress={() => router.push("/(modals)/lendOrSellModal")}
           >
-            <FontAwesome5 name="suitcase" size={normalize(34)} color="#424242" />
+            <FontAwesome5
+              name="suitcase"
+              size={normalize(34)}
+              color="#ef6c00"
+            />
             <Text style={styles.cardTitle}>Ödünç Eşya Verme & Satma</Text>
             <Text style={styles.cardText}>
               işlemleri ilanı vermek için tıklayınız.
@@ -69,7 +81,11 @@ const Home = () => {
             style={[styles.card, styles.grayButton]}
             onPress={() => router.push("/(modals)/campusEventModal")}
           >
-            <MaterialIcons name="campaign" size={normalize(42)} color="#424242" />
+            <MaterialIcons
+              name="campaign"
+              size={normalize(42)}
+              color="#ef6c00"
+            />
             <Text style={styles.cardTitle}>Etkinlik & Duyuru</Text>
             <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
@@ -80,7 +96,7 @@ const Home = () => {
             <MaterialCommunityIcons
               name="hand-heart-outline"
               size={normalize(35)}
-              color="#ef6c00"
+              color="#188040"
             />
             <Text style={styles.cardTitle}>Gönüllü Yardım</Text>
             <Text style={styles.cardText}>
@@ -99,74 +115,59 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    paddingHorizontal: wp(4.2), // 16px -> 4.2% of screen width
+    justifyContent: "center",
+    paddingHorizontal: wp(4.2),
     backgroundColor: "#f5f5f5",
-    paddingTop: hp(4.3), // 35px -> 4.3% of screen height
   },
   logoContainer: {
     alignItems: "center",
-    marginTop: hp(4.9), // 40px -> 4.9% of screen height
   },
   logoImage: {
-    width: wp(34.7), // 130px -> 34.7% of screen width
-    height: wp(34.7), // Keep aspect ratio square
+    width: wp(34.7),
+    height: wp(34.7),
   },
   slogan: {
     fontSize: normalize(20),
     fontWeight: "bold",
     color: "#188040",
-    marginBottom: hp(4.9), // 40px -> 4.9% of screen height
+    marginBottom: hp(5),
     textAlign: "center",
   },
   buttonsContainer: {
     width: "100%",
-    gap: hp(1), // 8px -> 1% of screen height
+    gap: hp(1),
   },
   row: {
     flexDirection: "row",
-    gap: wp(3.2), // 12px -> 3.2% of screen width
-    marginBottom: hp(1.5), // 12px -> 1.5% of screen height
+    gap: wp(3.2),
+    marginBottom: hp(1.5),
   },
   card: {
     flex: 1,
-    borderRadius: wp(4.3), // 16px -> 4.3% of screen width
-    padding: wp(4.3), // 16px -> 4.3% of screen width
-    minHeight: hp(19.5), // 160px -> 19.5% of screen height
+    borderRadius: 12,
+    padding: wp(4.3),
+    height: hp(19),
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "white",
     elevation: 4,
+    borderWidth: 1,
+    borderColor: colors.neutral300,
   },
   cardTitle: {
     fontSize: normalize(15),
     fontWeight: "bold",
-    marginTop: hp(1.2), // 10px -> 1.2% of screen height
+    marginTop: hp(1),
     textAlign: "center",
   },
   cardText: {
     fontSize: normalize(13),
     textAlign: "center",
     color: "#555",
-    marginTop: hp(0.2), // 2px -> 0.2% of screen height
+    marginTop: hp(0.5),
   },
-  greenButton: {
-    backgroundColor: "#f4f6f4",
-    borderColor: "#e8eae8",
-    borderWidth: 1,
-  },
-  blueButton: {
-    backgroundColor: "#f6f6f6",
-    borderColor: "#eaeaea",
-    borderWidth: 1,
-  },
-  orangeButton: {
-    backgroundColor: "#f6f5f4",
-    borderColor: "#eae9e8",
-    borderWidth: 1,
-  },
-  grayButton: {
-    backgroundColor: "#f3f3f3",
-    borderColor: "#e7e7e7",
-    borderWidth: 1,
-  },
+  greenButton: {},
+  blueButton: {},
+  orangeButton: {},
+  grayButton: {},
 });

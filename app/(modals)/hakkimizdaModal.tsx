@@ -30,8 +30,18 @@ const AboutScreen = () => {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.container}>
-        <BackButton style={{ marginBottom: 8, marginTop: 25 }} />
-        <Text style={styles.pageTitle}>Hakkımızda</Text>
+        <View style={styles.titleRow}>
+          <BackButton
+            iconSize={24}
+            iconColor="#666"
+            style={{
+              backgroundColor: "transparent",
+              padding: 0,
+              elevation: 0,
+            }}
+          />
+          <Text style={styles.pageTitle}>Hakkımızda</Text>
+        </View>
 
         <View style={styles.card}>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -131,14 +141,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 8,
   },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 30,
+    marginBottom: 8,
+  },
+
   pageTitle: {
+    flex: 1,
     fontSize: 22,
     fontWeight: "700",
     color: "#0F172A",
-    marginBottom: 12,
-
     textAlign: "center",
   },
+
   card: {
     backgroundColor: "#FFFFFF",
     borderRadius: 16,

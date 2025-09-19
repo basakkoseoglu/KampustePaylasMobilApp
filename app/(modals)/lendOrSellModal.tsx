@@ -198,12 +198,14 @@ const LendOrSellModal = () => {
           {/* Ana Başlık */}
           <View style={styles.titleRow}>
             <BackButton
-              iconSize={20}
+              iconSize={24}
               style={{
-                backgroundColor: "#7AA9CFFF",
+                backgroundColor: "#f5f5f5",
                 marginRight: 8,
               }}
+              iconColor="#666"
             />
+
             <Text style={styles.mainTitle}>
               {" "}
               Ödünç Eşya Verme & {"\n"} Kullanılmayan Eşya Satma
@@ -622,7 +624,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   titleRow: {
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 16,

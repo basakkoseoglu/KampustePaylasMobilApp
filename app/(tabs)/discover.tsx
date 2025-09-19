@@ -156,11 +156,11 @@ const Discover = () => {
             const allPosts = [...otherPosts, ...collectionPosts];
             return allPosts.sort((a, b) => b.createdAt - a.createdAt);
           });
-           setLoading(false);
+          setLoading(false);
         },
         (error) => {
           console.error(`${collectionName} dinleme hatası:`, error);
-          setLoading(false); 
+          setLoading(false);
         }
       );
 
@@ -733,7 +733,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   titleRow: { flexDirection: "row", alignItems: "center", marginBottom: 8 },
-  postTitle: { fontSize: 16 },
+  postTitle: { fontSize: 14 },
   cardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -746,8 +746,8 @@ const styles = StyleSheet.create({
   },
   contactButton: {
     backgroundColor: "#ff9800",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     borderRadius: 8,
   },
   contactButtonText: { color: "white", fontWeight: "600" },
