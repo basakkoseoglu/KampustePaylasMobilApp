@@ -156,9 +156,11 @@ const Discover = () => {
             const allPosts = [...otherPosts, ...collectionPosts];
             return allPosts.sort((a, b) => b.createdAt - a.createdAt);
           });
+           setLoading(false);
         },
         (error) => {
           console.error(`${collectionName} dinleme hatası:`, error);
+          setLoading(false); 
         }
       );
 
@@ -172,7 +174,6 @@ const Discover = () => {
     const fetchData = async () => {
       setLoading(true);
       setupRealtimeListeners();
-      setLoading(false);
     };
 
     fetchData();

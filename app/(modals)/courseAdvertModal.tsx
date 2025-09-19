@@ -176,7 +176,7 @@ const CourseAdvertModal = () => {
           {/* Ana Başlık */}
           <View style={styles.titleRow}>
             <BackButton
-              iconSize={30}
+              iconSize={20}
               style={{
                 backgroundColor: "#79A57BFF",
                 padding: 6,
@@ -573,11 +573,11 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   titleRow: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    // marginTop: 16,
     paddingHorizontal: 16,
+    marginTop: 16,
   },
 });
 

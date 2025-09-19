@@ -49,7 +49,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({ data }) => {
 };
 
 const InfoRow = ({ label, value }: { label: string; value: string }) => (
-  <View style={styles.rowBetween}>
+  <View style={styles.rowColumn}>
     <Text style={styles.label}>{label}</Text>
     <Text style={styles.value}>{value || '—'}</Text>
   </View>
@@ -84,22 +84,19 @@ export default EventDetailView;
       fontWeight: '600',
       color: colors.black,
     },
-    rowBetween: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 10,
-    },
-    label: {
-      fontWeight: '500',
-      color: colors.neutral400,
-      flex: 1,
-    },
-    value: {
-      color: colors.black,
-      fontWeight: '500',
-      textAlign: 'right',
-      flex: 1,
-    },
+   rowColumn: {
+    marginBottom: 10,
+  },
+  label: {
+    fontWeight: '500',
+    color: colors.neutral400,
+    marginBottom: 4, 
+  },
+  value: {
+    color: colors.black,
+    fontWeight: '500',
+    lineHeight: 20,
+  },
     footer: {
       paddingBottom: 32,
       alignItems: 'center',

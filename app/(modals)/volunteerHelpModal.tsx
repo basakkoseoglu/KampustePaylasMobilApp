@@ -193,7 +193,7 @@ const VolunteerHelpModal = () => {
           {/* Ana Başlık */}
           <View style={styles.titleRow}>
             <BackButton
-              iconSize={30}
+              iconSize={20}
               style={{
                 backgroundColor: "#FFCC80",
                 padding: 4,
@@ -598,10 +598,11 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   titleRow: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: 16,
+    marginTop: 16,
   },
   inputNoShadow: {
     backgroundColor: "#fff",

@@ -221,7 +221,7 @@ const CampusEventModal = () => {
           {/* <Text style={styles.mainTitle}>Kampüs İçi Etkinlik&Duyurular</Text> */}
           <View style={styles.titleRow}>
             <BackButton
-              iconSize={30}
+              iconSize={20}
               style={{
                 backgroundColor: "#424242",
                 padding: 4,
@@ -622,10 +622,10 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   titleRow: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    // marginTop: 16,
+    marginTop: 16,
     paddingHorizontal: 16,
   },
   inputNoShadow: {

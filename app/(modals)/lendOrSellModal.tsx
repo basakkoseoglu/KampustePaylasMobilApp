@@ -198,7 +198,7 @@ const LendOrSellModal = () => {
           {/* Ana Başlık */}
           <View style={styles.titleRow}>
             <BackButton
-              iconSize={30}
+              iconSize={20}
               style={{
                 backgroundColor: "#7AA9CFFF",
                 marginRight: 8,
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   titleRow: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
     marginTop: 16,

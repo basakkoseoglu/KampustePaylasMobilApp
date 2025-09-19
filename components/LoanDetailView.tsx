@@ -54,10 +54,11 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
   );
 };
 
+
 const InfoRow = ({ label, value }: { label: string; value: string }) => (
-  <View style={styles.rowBetween}>
+  <View style={styles.rowColumn}>
     <Text style={styles.label}>{label}</Text>
-    <Text style={styles.value}>{value || "—"}</Text>
+    <Text style={styles.value}>{value || '—'}</Text>
   </View>
 );
 
@@ -90,21 +91,18 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: colors.black,
   },
-  rowBetween: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+rowColumn: {
     marginBottom: 10,
   },
   label: {
-    fontWeight: "500",
+    fontWeight: '500',
     color: colors.neutral400,
-    flex: 1,
+    marginBottom: 4, 
   },
   value: {
     color: colors.black,
-    fontWeight: "500",
-    textAlign: "right",
-    flex: 1,
+    fontWeight: '500',
+    lineHeight: 20,
   },
   footer: {
     paddingBottom: 32,
@@ -120,5 +118,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "600",
     fontSize: 16,
+  },
+  descriptionValue: {
+    color: colors.black,
+    fontWeight: '500',
+    marginTop: 4,
+    lineHeight: 20,
   },
 });
