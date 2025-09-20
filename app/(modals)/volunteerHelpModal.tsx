@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
   mainTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#FFCC80",
+    color: "#FF9800",
     textAlign: "center",
     marginBottom: 8,
   },
@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   publishButton: {
-    backgroundColor: "#FFCC80",
+    backgroundColor: "#FF9800",
     borderRadius: 8,
     padding: 16,
     alignItems: "center",

@@ -1,6 +1,4 @@
 import { View, Platform, TouchableOpacity, StyleSheet } from "react-native";
-import { useLinkBuilder, useTheme } from "@react-navigation/native";
-import { Text, PlatformPressable } from "@react-navigation/elements";
 import {
   BottomTabBarProps,
   createBottomTabNavigator,
@@ -17,7 +15,7 @@ export default function CustomTabs({
   const tabbarIcons: any = {
     index: (isFocused: boolean) => (
       <View style={{ transform: [{ scale: isFocused ? 1.3 : 1 }] }}>
-        <Icons.CalendarBlank
+        <Icons.House
           size={verticalScale(28)}
           weight={isFocused ? "fill" : "regular"}
           color="black"
@@ -26,7 +24,7 @@ export default function CustomTabs({
     ),
     discover: (isFocused: boolean) => (
       <View style={{ transform: [{ scale: isFocused ? 1.3 : 1 }] }}>
-        <Icons.Megaphone
+        <Icons.CirclesFour
           size={verticalScale(28)}
           weight={isFocused ? "fill" : "regular"}
           color="black"
@@ -44,8 +42,8 @@ export default function CustomTabs({
     ),
     profile: (isFocused: boolean) => (
       <View style={{ transform: [{ scale: isFocused ? 1.2 : 1 }] }}>
-        <Icons.UserCircle
-          size={verticalScale(32)}
+        <Icons.User
+          size={verticalScale(30)}
           weight={isFocused ? "fill" : "regular"}
           color="black"
         />

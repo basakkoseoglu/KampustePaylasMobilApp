@@ -5,23 +5,76 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { colors } from "@/constants/theme";
-import { Image } from "expo-image";
 import * as Icons from "phosphor-react-native";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import { router } from "expo-router";
+import { useAuth } from "@/contexts/authContext";
+import { deleteDoc, doc, getFirestore } from "firebase/firestore";
+import { Trash } from "phosphor-react-native";
 
 interface EventDetailViewProps {
   data: any;
 }
 
 const EventDetailView: React.FC<EventDetailViewProps> = ({ data }) => {
+  const { user } = useAuth();
+
+  const handleStartChat = async (postData: any) => {
+    if (!user?.uid || !user?.name) return;
+    
+    // Firebase'deki alan adını kontrol et - genelde ownerUid kullanılır
+    const receiverId = postData.ownerUid || postData.ownerId;
+    
+    if (!receiverId) {
+      console.error("receiverId bulunamadı:", postData);
+      return;
+    }
+    
+    const chatId = [user.uid, receiverId].sort().join("_");
+
+    router.push({
+      pathname: "/MessagingScreen",
+      params: {
+        chatId,
+        receiverName: postData.ownerName,
+        receiverImage: postData?.ownerImage || "",
+        currentUserId: user?.uid,
+        username: user?.name,
+        receiverId: receiverId,
+      },
+    });
+  };
+
+  const handleDeletePost = async (postId: string, type: string) => {
+    Alert.alert("İlanı Sil", "Bu ilanı silmek istediğinize emin misiniz?", [
+      { text: "İptal", style: "cancel" },
+      {
+        text: "Sil",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deleteDoc(doc(getFirestore(), type, postId));
+            // Silme işlemi tamamlandıktan sonra geri dön
+            router.back();
+          } catch (error) {
+            console.error("İlan silme hatası:", error);
+          }
+        },
+      },
+    ]);
+  };
+
+  // Kullanıcının kendi ilanı mı kontrol et
+  const isOwnPost = user?.uid === (data.ownerUid || data.ownerId);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Kişi Bilgileri */}
       <View style={styles.card}>
         <View style={styles.sectionHeader}>
-          <Icons.User size={18} color="#9C88B8" weight="bold" />
+          <Icons.User size={18} color="#757575" weight="bold" />
           <Text style={styles.sectionTitle}>Kişi Bilgileri</Text>
         </View>
         <InfoRow label="İsim" value={data.ownerName} />
@@ -31,24 +84,45 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({ data }) => {
       {/* Etkinlik Bilgileri */}
       <View style={styles.card}>
         <View style={styles.sectionHeader}>
-          <Icons.Target size={18} color="#9C88B8" weight="bold" />
+          <Icons.Target size={18} color="#757575" weight="bold" />
           <Text style={styles.sectionTitle}>Etkinlik Bilgileri</Text>
         </View>
-        <InfoRow label="Başlık" value={data.ilanBasligi} />
-        <InfoRow label="Etkinlik Açıklaması" value={data.etkinlikAciklamasi} />
+        <InfoRow label="Başlık" value={data.ilanBasligi || data.adTitle || data.title} />
+        <InfoRow label="Etkinlik Açıklaması" value={data.etkinlikAciklamasi || data.description} />
         <InfoRow label="Katılım Şartları" value={data.katilimSartlari} />
         <InfoRow label="Ücret Bilgisi" value={data.ucretBilgisi} />
         <InfoRow label="Etkinlik Türü" value={data.etkinlikTuru} />
         <InfoRow label="Etkinlik Tarihi" value={data.etkinlikTarihi} />
         <InfoRow label="Etkinlik Saati" value={data.etkinlikSaati} />
         <InfoRow label="Etkinlik Yeri" value={data.etkinlikYeri} />
+        
+        {/* Tarih bilgisi varsa göster */}
+        {data.createdAt && (
+          <InfoRow 
+            label="Yayınlanma Tarihi" 
+            value={formatDate(data.createdAt)} 
+          />
+        )}
       </View>
 
-      {/* Buton */}
+      {/* Butonlar */}
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>İlgileniyorum</Text>
-        </TouchableOpacity>
+        {isOwnPost ? (
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => handleDeletePost(data.id, data.type || 'eventAds')}
+          >
+            <Trash size={20} color="white" />
+            <Text style={styles.deleteButtonText}>İlanı Sil</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity 
+            style={styles.contactButton} 
+            onPress={() => handleStartChat(data)}
+          >
+            <Text style={styles.contactButtonText}>İlgileniyorum</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -60,6 +134,22 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => (
     <Text style={styles.value}>{value || "—"}</Text>
   </View>
 );
+
+// Tarih formatlama fonksiyonu
+const formatDate = (timestamp: number | any) => {
+  let date;
+  if (typeof timestamp === 'number') {
+    date = new Date(timestamp);
+  } else if (timestamp && typeof timestamp.toDate === 'function') {
+    date = timestamp.toDate();
+  } else {
+    return "—";
+  }
+  
+  return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}.${date.getFullYear()}`;
+};
 
 export default EventDetailView;
 
@@ -107,13 +197,31 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     alignItems: "center",
   },
-  button: {
-    backgroundColor: "#FF9800",
+  contactButton: {
+    backgroundColor: "#ff9800",
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  buttonText: {
+  contactButtonText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: 16,
+  },
+  deleteButton: {
+    backgroundColor: "#ff4444",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  deleteButtonText: {
     color: "white",
     fontWeight: "600",
     fontSize: 16,

@@ -55,54 +55,59 @@ const Home = () => {
             style={[styles.card, styles.greenButton]}
             onPress={() => router.push("/(modals)/courseAdvertModal")}
           >
-            <Entypo name="open-book" size={normalize(38)} color="#188040" />
+            <Entypo name="open-book" size={normalize(32)} color="#4CAF50" />
             <Text style={styles.cardTitle}>Ders Notu & Kitap</Text>
             <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+  <TouchableOpacity
+            style={[styles.card, styles.grayButton]}
+            onPress={() => router.push("/(modals)/campusEventModal")}
+          >
+            <MaterialIcons
+              name="campaign"
+              size={normalize(35)}
+              color="#757575"
+            />
+            <Text style={styles.cardTitle}>Etkinlik & Duyuru</Text>
+            <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
+          </TouchableOpacity>
+         
+        </View>
+
+        <View style={styles.row}>
+
+           <TouchableOpacity
+            style={[styles.card, styles.orangeButton]}
+            onPress={() => router.push("/(modals)/volunteerHelpModal")}
+          >
+            <MaterialCommunityIcons
+              name="hand-heart-outline"
+              size={normalize(32)}
+              color="#FF9800"
+              
+            />
+            <Text style={styles.cardTitle}>Gönüllü Yardım</Text>
+            <Text style={styles.cardText}>
+               ilanı vermek için tıklayınız.
+            </Text>
+          </TouchableOpacity>
+           <TouchableOpacity
             style={[styles.card, styles.blueButton]}
             onPress={() => router.push("/(modals)/lendOrSellModal")}
           >
             <FontAwesome5
               name="suitcase"
-              size={normalize(34)}
-              color="#ef6c00"
+              size={normalize(28)}
+              color="#64b5f6"
             />
             <Text style={styles.cardTitle}>Ödünç Eşya Verme & Satma</Text>
             <Text style={styles.cardText}>
               işlemleri ilanı vermek için tıklayınız.
             </Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.row}>
-          <TouchableOpacity
-            style={[styles.card, styles.grayButton]}
-            onPress={() => router.push("/(modals)/campusEventModal")}
-          >
-            <MaterialIcons
-              name="campaign"
-              size={normalize(42)}
-              color="#ef6c00"
-            />
-            <Text style={styles.cardTitle}>Etkinlik & Duyuru</Text>
-            <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.card, styles.orangeButton]}
-            onPress={() => router.push("/(modals)/volunteerHelpModal")}
-          >
-            <MaterialCommunityIcons
-              name="hand-heart-outline"
-              size={normalize(35)}
-              color="#188040"
-            />
-            <Text style={styles.cardTitle}>Gönüllü Yardım</Text>
-            <Text style={styles.cardText}>
-              (Ders desteği, kampüs işleri vb.) ilanı vermek için tıklayınız.
-            </Text>
-          </TouchableOpacity>
+        
+         
         </View>
       </View>
     </ScreenWrapper>
@@ -145,7 +150,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     borderRadius: 12,
-    padding: wp(4.3),
+    padding: wp(3),
     height: hp(19),
     justifyContent: "center",
     alignItems: "center",
