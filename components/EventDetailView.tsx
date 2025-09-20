@@ -23,15 +23,15 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({ data }) => {
 
   const handleStartChat = async (postData: any) => {
     if (!user?.uid || !user?.name) return;
-    
+
     // Firebase'deki alan adını kontrol et - genelde ownerUid kullanılır
     const receiverId = postData.ownerUid || postData.ownerId;
-    
+
     if (!receiverId) {
       console.error("receiverId bulunamadı:", postData);
       return;
     }
-    
+
     const chatId = [user.uid, receiverId].sort().join("_");
 
     router.push({
@@ -87,20 +87,26 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({ data }) => {
           <Icons.Target size={18} color="#757575" weight="bold" />
           <Text style={styles.sectionTitle}>Etkinlik Bilgileri</Text>
         </View>
-        <InfoRow label="Başlık" value={data.ilanBasligi || data.adTitle || data.title} />
-        <InfoRow label="Etkinlik Açıklaması" value={data.etkinlikAciklamasi || data.description} />
+        <InfoRow
+          label="Başlık"
+          value={data.ilanBasligi || data.adTitle || data.title}
+        />
+        <InfoRow
+          label="Etkinlik Açıklaması"
+          value={data.etkinlikAciklamasi || data.description}
+        />
         <InfoRow label="Katılım Şartları" value={data.katilimSartlari} />
         <InfoRow label="Ücret Bilgisi" value={data.ucretBilgisi} />
         <InfoRow label="Etkinlik Türü" value={data.etkinlikTuru} />
         <InfoRow label="Etkinlik Tarihi" value={data.etkinlikTarihi} />
         <InfoRow label="Etkinlik Saati" value={data.etkinlikSaati} />
         <InfoRow label="Etkinlik Yeri" value={data.etkinlikYeri} />
-        
+
         {/* Tarih bilgisi varsa göster */}
         {data.createdAt && (
-          <InfoRow 
-            label="Yayınlanma Tarihi" 
-            value={formatDate(data.createdAt)} 
+          <InfoRow
+            label="Yayınlanma Tarihi"
+            value={formatDate(data.createdAt)}
           />
         )}
       </View>
@@ -110,14 +116,14 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({ data }) => {
         {isOwnPost ? (
           <TouchableOpacity
             style={styles.deleteButton}
-            onPress={() => handleDeletePost(data.id, data.type || 'eventAds')}
+            onPress={() => handleDeletePost(data.id, data.type || "eventAds")}
           >
             <Trash size={20} color="white" />
             <Text style={styles.deleteButtonText}>İlanı Sil</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
-            style={styles.contactButton} 
+          <TouchableOpacity
+            style={styles.contactButton}
             onPress={() => handleStartChat(data)}
           >
             <Text style={styles.contactButtonText}>İlgileniyorum</Text>
@@ -138,14 +144,14 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => (
 // Tarih formatlama fonksiyonu
 const formatDate = (timestamp: number | any) => {
   let date;
-  if (typeof timestamp === 'number') {
+  if (typeof timestamp === "number") {
     date = new Date(timestamp);
-  } else if (timestamp && typeof timestamp.toDate === 'function') {
+  } else if (timestamp && typeof timestamp.toDate === "function") {
     date = timestamp.toDate();
   } else {
     return "—";
   }
-  
+
   return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
     .toString()
     .padStart(2, "0")}.${date.getFullYear()}`;
@@ -212,9 +218,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   deleteButton: {
-    backgroundColor: "#ff4444",
+    backgroundColor: colors.neutral400,
     paddingVertical: 12,
-    paddingHorizontal: 25,
+    paddingHorizontal: 18,
     borderRadius: 8,
     flexDirection: "row",
     alignItems: "center",

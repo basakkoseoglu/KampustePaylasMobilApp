@@ -60,7 +60,7 @@ const Home = () => {
             <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
 
-  <TouchableOpacity
+          <TouchableOpacity
             style={[styles.card, styles.grayButton]}
             onPress={() => router.push("/(modals)/campusEventModal")}
           >
@@ -72,12 +72,10 @@ const Home = () => {
             <Text style={styles.cardTitle}>Etkinlik & Duyuru</Text>
             <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
-         
         </View>
 
         <View style={styles.row}>
-
-           <TouchableOpacity
+          <TouchableOpacity
             style={[styles.card, styles.orangeButton]}
             onPress={() => router.push("/(modals)/volunteerHelpModal")}
           >
@@ -85,14 +83,11 @@ const Home = () => {
               name="hand-heart-outline"
               size={normalize(32)}
               color="#FF9800"
-              
             />
             <Text style={styles.cardTitle}>Gönüllü Yardım</Text>
-            <Text style={styles.cardText}>
-               ilanı vermek için tıklayınız.
-            </Text>
+            <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
-           <TouchableOpacity
+          <TouchableOpacity
             style={[styles.card, styles.blueButton]}
             onPress={() => router.push("/(modals)/lendOrSellModal")}
           >
@@ -102,12 +97,8 @@ const Home = () => {
               color="#64b5f6"
             />
             <Text style={styles.cardTitle}>Ödünç Eşya Verme & Satma</Text>
-            <Text style={styles.cardText}>
-              işlemleri ilanı vermek için tıklayınız.
-            </Text>
+            <Text style={styles.cardText}>ilanı vermek için tıklayınız.</Text>
           </TouchableOpacity>
-        
-         
         </View>
       </View>
     </ScreenWrapper>

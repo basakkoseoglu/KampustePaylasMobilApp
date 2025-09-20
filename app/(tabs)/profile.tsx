@@ -219,8 +219,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listIcon: {
-    height: verticalScale(44),
-    width: verticalScale(44),
+    height: verticalScale(40),
+    width: verticalScale(40),
     backgroundColor: colors.neutral400,
     alignItems: "center",
     justifyContent: "center",
@@ -228,7 +228,11 @@ const styles = StyleSheet.create({
     borderCurve: "continuous",
   },
   listItem: {
-    marginBottom: verticalScale(17),
+    marginBottom: verticalScale(10),
+    backgroundColor: colors.white,
+    padding: spacingX._10,
+    borderRadius: radius._15,
+    elevation: 2,
   },
   accountOptions: {
     marginTop: spacingY._35,

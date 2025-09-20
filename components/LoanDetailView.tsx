@@ -24,15 +24,15 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
 
   const handleStartChat = async (postData: any) => {
     if (!user?.uid || !user?.name) return;
-    
+
     // Firebase'deki alan adını kontrol et - genelde ownerUid kullanılır
     const receiverId = postData.ownerUid || postData.ownerId;
-    
+
     if (!receiverId) {
       console.error("receiverId bulunamadı:", postData);
       return;
     }
-    
+
     const chatId = [user.uid, receiverId].sort().join("_");
 
     router.push({
@@ -88,7 +88,10 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
           <Icons.Swap size={18} color="#64b5f6" weight="bold" />
           <Text style={styles.sectionTitle}>İlan Bilgileri</Text>
         </View>
-        <InfoRow label="Başlık" value={data.itemTitle || data.adTitle || data.title} />
+        <InfoRow
+          label="Başlık"
+          value={data.itemTitle || data.adTitle || data.title}
+        />
         <InfoRow label="Açıklama" value={data.description} />
         <InfoRow label="Özel Şartlar" value={data.specialConditions} />
         <InfoRow label="Fiyat" value={data.price} />
@@ -96,12 +99,12 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
         <InfoRow label="Eşya Türü" value={data.resourceType} />
         <InfoRow label="Durumu" value={data.conditionType} />
         <InfoRow label="Depozite İsteniyor Mu" value={data.shareType} />
-        
+
         {/* Tarih bilgisi varsa göster */}
         {data.createdAt && (
-          <InfoRow 
-            label="Yayınlanma Tarihi" 
-            value={formatDate(data.createdAt)} 
+          <InfoRow
+            label="Yayınlanma Tarihi"
+            value={formatDate(data.createdAt)}
           />
         )}
       </View>
@@ -111,14 +114,14 @@ const LoanDetailView: React.FC<LoanDetailViewProps> = ({ data }) => {
         {isOwnPost ? (
           <TouchableOpacity
             style={styles.deleteButton}
-            onPress={() => handleDeletePost(data.id, data.type || 'loanAds')}
+            onPress={() => handleDeletePost(data.id, data.type || "loanAds")}
           >
             <Trash size={20} color="white" />
             <Text style={styles.deleteButtonText}>İlanı Sil</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
-            style={styles.contactButton} 
+          <TouchableOpacity
+            style={styles.contactButton}
             onPress={() => handleStartChat(data)}
           >
             <Text style={styles.contactButtonText}>İlgileniyorum</Text>
@@ -139,14 +142,14 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => (
 // Tarih formatlama fonksiyonu
 const formatDate = (timestamp: number | any) => {
   let date;
-  if (typeof timestamp === 'number') {
+  if (typeof timestamp === "number") {
     date = new Date(timestamp);
-  } else if (timestamp && typeof timestamp.toDate === 'function') {
+  } else if (timestamp && typeof timestamp.toDate === "function") {
     date = timestamp.toDate();
   } else {
     return "—";
   }
-  
+
   return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
     .toString()
     .padStart(2, "0")}.${date.getFullYear()}`;
@@ -213,9 +216,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   deleteButton: {
-    backgroundColor: "#ff4444",
+    backgroundColor: colors.neutral400,
     paddingVertical: 12,
-    paddingHorizontal: 25,
+    paddingHorizontal: 18,
     borderRadius: 8,
     flexDirection: "row",
     alignItems: "center",

@@ -23,15 +23,15 @@ const NoteDetailView: React.FC<NoteDetailViewProps> = ({ data }) => {
 
   const handleStartChat = async (postData: any) => {
     if (!user?.uid || !user?.name) return;
-    
+
     // Firebase'deki alan adını kontrol et - genelde ownerUid kullanılır
     const receiverId = postData.ownerUid || postData.ownerId;
-    
+
     if (!receiverId) {
       console.error("receiverId bulunamadı:", postData);
       return;
     }
-    
+
     const chatId = [user.uid, receiverId].sort().join("_");
 
     router.push({
@@ -84,21 +84,35 @@ const NoteDetailView: React.FC<NoteDetailViewProps> = ({ data }) => {
       {/* İlan Bilgileri */}
       <View style={styles.card}>
         <View style={styles.sectionHeader}>
-          <Icons.Books size={18} color="#4CAF50"weight="bold" />
+          <Icons.Books size={18} color="#4CAF50" weight="bold" />
           <Text style={styles.sectionTitle}>İlan Bilgileri</Text>
         </View>
-        <InfoRow label="Başlık" value={data.courseTitle || data.itemTitle || data.adTitle || data.ilanBasligi} />
-        <InfoRow label="Ders Adı/Konu" value={data.courseName || data.itemName || data.eventName} />
-        <InfoRow label="Açıklama" value={data.description || data.adDescription} />
+        <InfoRow
+          label="Başlık"
+          value={
+            data.courseTitle ||
+            data.itemTitle ||
+            data.adTitle ||
+            data.ilanBasligi
+          }
+        />
+        <InfoRow
+          label="Ders Adı/Konu"
+          value={data.courseName || data.itemName || data.eventName}
+        />
+        <InfoRow
+          label="Açıklama"
+          value={data.description || data.adDescription}
+        />
         <InfoRow label="Not/Kaynak Türü" value={data.resourceType} />
         <InfoRow label="Durumu" value={data.conditionType} />
         <InfoRow label="Paylaşım Şekli" value={data.shareType} />
-        
+
         {/* Tarih bilgisi varsa göster */}
         {data.createdAt && (
-          <InfoRow 
-            label="Yayınlanma Tarihi" 
-            value={formatDate(data.createdAt)} 
+          <InfoRow
+            label="Yayınlanma Tarihi"
+            value={formatDate(data.createdAt)}
           />
         )}
       </View>
@@ -108,14 +122,14 @@ const NoteDetailView: React.FC<NoteDetailViewProps> = ({ data }) => {
         {isOwnPost ? (
           <TouchableOpacity
             style={styles.deleteButton}
-            onPress={() => handleDeletePost(data.id, data.type || 'notesAds')}
+            onPress={() => handleDeletePost(data.id, data.type || "notesAds")}
           >
             <Trash size={20} color="white" />
             <Text style={styles.deleteButtonText}>İlanı Sil</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity 
-            style={styles.contactButton} 
+          <TouchableOpacity
+            style={styles.contactButton}
             onPress={() => handleStartChat(data)}
           >
             <Text style={styles.contactButtonText}>İlgileniyorum</Text>
@@ -136,14 +150,14 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => (
 // Tarih formatlama fonksiyonu
 const formatDate = (timestamp: number | any) => {
   let date;
-  if (typeof timestamp === 'number') {
+  if (typeof timestamp === "number") {
     date = new Date(timestamp);
-  } else if (timestamp && typeof timestamp.toDate === 'function') {
+  } else if (timestamp && typeof timestamp.toDate === "function") {
     date = timestamp.toDate();
   } else {
     return "—";
   }
-  
+
   return `${date.getDate().toString().padStart(2, "0")}.${(date.getMonth() + 1)
     .toString()
     .padStart(2, "0")}.${date.getFullYear()}`;
@@ -210,9 +224,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   deleteButton: {
-    backgroundColor: "#ff4444",
+    backgroundColor: colors.neutral400,
     paddingVertical: 12,
-    paddingHorizontal: 25,
+    paddingHorizontal: 18,
     borderRadius: 8,
     flexDirection: "row",
     alignItems: "center",
