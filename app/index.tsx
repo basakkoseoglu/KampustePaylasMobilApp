@@ -19,7 +19,7 @@ const Index = () => {
       <Image
         style={styles.logo}
         resizeMode="contain"
-        source={require("../assets/images/logo3.png")}
+        source={require("../assets/images/kplogo.png")}
       />
     </View>
   );

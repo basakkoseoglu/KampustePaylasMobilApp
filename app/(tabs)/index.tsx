@@ -41,7 +41,7 @@ const Home = () => {
     <ScreenWrapper style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require("../../assets/images/logo3.png")}
+          source={require("../../assets/images/kplogo.png")}
           style={styles.logoImage}
           resizeMode="contain"
         />

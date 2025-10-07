@@ -1,7 +1,6 @@
 import { auth, firestore } from "@/config/firebase";
 import { AuthContextType, UserType } from "@/types";
 import { useRouter } from "expo-router";
-import { FirebaseError } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -9,6 +8,31 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { createContext, useContext, useEffect, useState } from "react";
+
+const translateFirebaseError = (msg: string) => {
+  if (msg.includes("(auth/invalid-credential)"))
+    return "Kullanıcı bilgileri yanlış.";
+  if (msg.includes("(auth/invalid-email)"))
+    return "Geçersiz e-posta adresi.";
+  if (msg.includes("(auth/email-already-in-use)"))
+    return "Bu e-posta adresi zaten kullanılıyor.";
+  if (msg.includes("(auth/weak-password)"))
+    return "Şifre en az 6 karakter olmalıdır.";
+  if (msg.includes("(auth/network-request-failed)"))
+    return "İnternet bağlantısı bulunamadı. Lütfen bağlantınızı kontrol edin.";
+  if (msg.includes("(auth/too-many-requests)"))
+    return "Çok fazla deneme yaptınız. Lütfen daha sonra tekrar deneyin.";
+  if (msg.includes("(auth/user-disabled)"))
+    return "Bu hesap devre dışı bırakılmış.";
+  if (msg.includes("(auth/user-not-found)"))
+    return "Bu e-posta adresine ait bir hesap bulunamadı.";
+  if (msg.includes("(auth/wrong-password)"))
+    return "Şifre yanlış.";
+  if (msg.includes("(auth/internal-error)"))
+    return "Sunucuda bir hata oluştu. Lütfen tekrar deneyin.";
+
+  return "Bir hata oluştu. Lütfen tekrar deneyin.";
+};
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -30,26 +54,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         updateUserData(firebaseUser.uid);
         router.replace("/(tabs)");
       } else {
-        //kullanıcı yoksa
         setUser(null);
         router.replace("/(auth)/welcome");
       }
     });
     return () => unsub();
   }, []);
+
   const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       return { success: true };
     } catch (error: any) {
-      let msg = error.message;
-      console.log("hata mesajı: ", msg);
-      if (msg.includes("auth/invalid-credential)"))
-        msg = "Kullanıcı Bilgileri Yanlış.";
-      if (msg.includes("auth/invalid-email)")) msg = "Geçersiz E-posta Adresi.";
+      const msg = translateFirebaseError(error.message);
+      console.log("Firebase login hatası:", error.message);
       return { success: false, msg };
     }
   };
+
   const register = async (
     email: string,
     password: string,
@@ -66,18 +88,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         name,
         email,
         uid: response?.user?.uid,
-        university: university || "", // üniversite bilgisini de ekle
+        university: university || "",
       });
       return { success: true };
     } catch (error: any) {
-      let msg = error.message;
-      console.log("hata mesajı: ", msg);
-      if (msg.includes("(auth/email-already-in-use)"))
-        msg = "Bu e-posta adresi zaten kullanılıyor.";
-      if (msg.includes("(auth/invalid-email)")) msg = "Geçersiz E-posta Adresi";
-      if (msg.includes("(auth/weak-password)"))
-        msg = "Şifre 6 karakterden az olamaz.";
-
+      const msg = translateFirebaseError(error.message);
+      console.log("Firebase register hatası:", error.message);
       return { success: false, msg };
     }
   };
@@ -100,9 +116,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setUser({ ...userData });
       }
     } catch (error: any) {
-      let msg = error.message;
-      // return {success:false,msg};
-      console.log("error", error);
+      console.log("Kullanıcı verisi güncellenemedi:", error);
     }
   };
 
